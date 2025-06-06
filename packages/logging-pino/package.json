@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "type": "commonjs",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/CodeNet-pl/NodeJS"
+  },
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
