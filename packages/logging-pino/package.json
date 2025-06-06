@@ -1,0 +1,15 @@
+{
+  "name": "@code-net/logging-pino",
+  "version": "0.1.0",
+  "type": "commonjs",
+  "license": "MIT",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@code-net/logging": "0.3.0"
+  },
+  "peerDependencies": {
+    "pino": "^9.5.0"
+  }
+}
