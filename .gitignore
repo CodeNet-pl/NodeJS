@@ -8,3 +8,5 @@
 .github/instructions/nx.instructions.md
 
 node_modules
+dist
+tmp
