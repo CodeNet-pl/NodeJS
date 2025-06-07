@@ -12,11 +12,11 @@ npm install @code-net/logging @code-net/logging-pino pino
 
 ```ts
 import pino from 'pino';
-import { Logger } from '@code-net/logging';
-import { pinoCustomLevels } from '@code-net/logging-pino';
+import { LogLevel, Logger } from '@code-net/logging';
+import { PinoLogger, pinoCustomLevels } from '@code-net/logging-pino';
 
-const logger = new PinoLogger(
-  pino({
+const logger: Logger = new PinoLogger(
+  pino<LogLevel>({
     level: 'info',
     customLevels: pinoCustomLevels,
     useOnlyCustomLevels: true,

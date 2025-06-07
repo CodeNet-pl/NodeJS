@@ -12,13 +12,10 @@ export const pinoCustomLevels: Record<LogLevel, number> = {
   emergency: 70,
 } as const;
 
-export const createPino = (options?: {
-  level?: string;
-  pretty?: boolean;
-}): Pino => {
-  return pino({
+export const createPino = (options?: { level?: string; pretty?: boolean }) => {
+  return pino<LogLevel>({
     level: options?.level,
-    customLevels: pinoCustomLevels as any,
+    customLevels: pinoCustomLevels,
     useOnlyCustomLevels: true,
     transport: options?.pretty
       ? {

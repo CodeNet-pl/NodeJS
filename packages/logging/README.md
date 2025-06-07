@@ -60,7 +60,7 @@ export abstract class Logger {
   /**
    * Log a message with level given as an argument
    */
-  abstract log(level: LogLevel, message: string | Error, context?: LogContext): void;
+  abstract log(level: LogLevel, message: string, context?: LogContext): void;
 
   /**
    * Creates a child logger that will always add given context to all logs
