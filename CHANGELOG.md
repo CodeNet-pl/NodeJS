@@ -1,3 +1,13 @@
+## 1.0.2 (2025-06-07)
+
+### 🚀 Features
+
+- **errors:** add package ([d120979](https://github.com/CodeNet-pl/NodeJS/commit/d120979))
+
+### ❤️ Thank You
+
+- Bartosz Pasiński
+
 ## 1.0.1 (2025-06-07)
 
 ### 🩹 Fixes
