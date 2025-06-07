@@ -35,14 +35,14 @@ export abstract class Logger {
    * Runtime errors that do not require immediate action but should typically
    * be logged and monitored.
    */
-  abstract error(message: string | Error, context?: LogContext): void;
+  abstract error(message: string, context?: LogContext): void;
 
   /**
    * Critical conditions.
    *
    * Example: Application component unavailable, unexpected exception.
    */
-  abstract critical(message: string | Error, context?: LogContext): void;
+  abstract critical(message: string, context?: LogContext): void;
 
   /**
    * Action must be taken immediately.
@@ -82,35 +82,9 @@ const logger: Logger = new MockLogger();
 logger.emergency('Hello world!') // Does nothing
 ```
 
-### Pino Logger
+### Pino
 
-This package contains `pino` implementation of the interface. To make use of it, you need to install both `@code-net/logging` and `pino` packages:
-
-```bash
-npm install @code-net/logging pino
-```
-
-```ts
-import pino from 'pino';
-import { Logger, pinoCustomLevels } from '@code-net/logging';
-
-const logger = new PinoLogger(
-  pino({
-    level: 'info',
-    customLevels: pinoCustomLevels,
-    useOnlyCustomLevels: true,
-  })
-)
-
-logger.debug('Hello world!') // logs with level debug
-logger.info('Hello world!') // logs with level info
-logger.notice('Hello world!') // logs with level notice
-logger.warning('Hello world!') // logs with level warning
-logger.error('Hello world!') // logs with level error
-logger.critical('Hello world!') // logs with level critical
-logger.alert('Hello world!') // logs with level alert
-logger.emergency('Hello world!') // logs with level emergency
-```
+If you need pino then it is supported via package [@code-net/logging-pino](https://www.npmjs.com/package/@code-net/logging-pino).
 
 ## License
 
