@@ -10,12 +10,12 @@ export const uuid = {
 };
 
 export class Uuid<T = unknown> {
-  protected symbol!: T;
+  private readonly __brand!: T;
 
   constructor(private readonly id: string = uuid.v4()) {
     if (!uuid.isValid(id)) {
       throw new InvalidValue(
-        `${this.symbol} is not valid UUID, given: "${id}"`
+        `${this.__brand} ID is not valid UUID, given: "${id}"`
       );
     }
   }
@@ -44,13 +44,13 @@ export class Uuid<T = unknown> {
     return this.id;
   }
 
-  static for<T>(type: T): new (id?: string) => Uuid<T> {
+  static for<T>(): new (id?: string) => Uuid<T> {
     return class UuidFor extends Uuid<T> {
       constructor(id: string = uuid.v4()) {
         super(id);
         if (!uuid.isValid(id)) {
           throw new InvalidValue(
-            `${this.symbol} is not valid UUID, given: "${id}"`
+            `${this.__brand} is not valid UUID, given: "${id}"`
           );
         }
       }
