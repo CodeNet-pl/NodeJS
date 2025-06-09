@@ -15,7 +15,7 @@ export class Uuid<T = unknown> {
   constructor(private readonly id: string = uuid.v4()) {
     if (!uuid.isValid(id)) {
       throw new InvalidValue(
-        `${this.__brand} ID is not valid UUID, given: "${id}"`
+        `${this.constructor.name} is not valid UUID, given: "${id}"`
       );
     }
   }
@@ -42,18 +42,5 @@ export class Uuid<T = unknown> {
 
   valueOf() {
     return this.id;
-  }
-
-  static for<T>(): new (id?: string) => Uuid<T> {
-    return class UuidFor extends Uuid<T> {
-      constructor(id: string = uuid.v4()) {
-        super(id);
-        if (!uuid.isValid(id)) {
-          throw new InvalidValue(
-            `${this.__brand} is not valid UUID, given: "${id}"`
-          );
-        }
-      }
-    };
   }
 }

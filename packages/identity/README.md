@@ -41,8 +41,8 @@ Creating value objects:
 ```ts
 import { Uuid } from '@code-net/identity';
 
-class UserId extends Uuid.for('User') {}
-class ProductId extends Uuid.for('Product') {}
+class UserId extends Uuid<'User'> {}
+class ProductId extends Uuid<'Product'> {}
 
 let userId = new UserId();
 let productId = new ProductId();
