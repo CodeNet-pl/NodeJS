@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@code-net/errors": ["packages/errors/src/index.ts"],
+      "@code-net/identity": ["packages/identity/src/index.ts"],
       "@code-net/logging": ["packages/logging/src/index.ts"],
       "@code-net/logging-pino": ["packages/logging-pino/src/index.ts"]
     }
