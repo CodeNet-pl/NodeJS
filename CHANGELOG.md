@@ -1,3 +1,13 @@
+## 1.0.3 (2025-06-09)
+
+### 🚀 Features
+
+- **identity:** create package ([8cafb71](https://github.com/CodeNet-pl/NodeJS/commit/8cafb71))
+
+### ❤️ Thank You
+
+- Bartosz Pasiński
+
 ## 1.0.2 (2025-06-07)
 
 ### 🚀 Features
