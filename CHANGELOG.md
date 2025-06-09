@@ -1,3 +1,13 @@
+## 1.1.0 (2025-06-09)
+
+### 🚀 Features
+
+- **identity:** simplify Uuid class ([74874cb](https://github.com/CodeNet-pl/NodeJS/commit/74874cb))
+
+### ❤️ Thank You
+
+- Bartosz Pasiński
+
 ## 1.0.5 (2025-06-09)
 
 This was a version bump only, there were no code changes.
