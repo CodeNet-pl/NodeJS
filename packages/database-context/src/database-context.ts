@@ -1,4 +1,4 @@
-type IsolationLevel =
+export type IsolationLevel =
   | 'read uncommitted'
   | 'read committed'
   | 'repeatable read'
