@@ -1,3 +1,14 @@
+## 1.1.1 (2025-06-10)
+
+### 🚀 Features
+
+- **database-context:** add package ([590c072](https://github.com/CodeNet-pl/NodeJS/commit/590c072))
+- **database-context:** export isolation level type ([d16998e](https://github.com/CodeNet-pl/NodeJS/commit/d16998e))
+
+### ❤️ Thank You
+
+- Bartosz Pasiński
+
 ## 1.1.0 (2025-06-09)
 
 ### 🚀 Features
