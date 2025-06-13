@@ -1,6 +1,6 @@
 # json-schema-class
 
-This package provides JSON Schema Registry functionality, allowing you to manage and validate JSON schemas.
+This package provides JSON Schema Registry functionality, allowing you to register classes and resolve JSON Schemas for them.
 
 It builds on top of `ts-decorator-json-schema-generator` package to translate classes into JSON Schema definitions.
 
