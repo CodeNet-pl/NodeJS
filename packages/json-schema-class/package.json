@@ -1,0 +1,16 @@
+{
+  "name": "@code-net/json-schema-class",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "description": "Library for registering classes and resolving JSON schemas form class.",
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "ts-decorator-json-schema-generator": "^1.4.1",
+    "json-schema": "^0.4.0"
+  },
+  "devDependencies": {
+    "@types/json-schema": "^7.0.15"
+  }
+}

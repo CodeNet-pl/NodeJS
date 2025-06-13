@@ -18,6 +18,9 @@
       "@code-net/database-context": ["packages/database-context/src/index.ts"],
       "@code-net/errors": ["packages/errors/src/index.ts"],
       "@code-net/identity": ["packages/identity/src/index.ts"],
+      "@code-net/json-schema-class": [
+        "packages/json-schema-class/src/index.ts"
+      ],
       "@code-net/logging": ["packages/logging/src/index.ts"],
       "@code-net/logging-pino": ["packages/logging-pino/src/index.ts"]
     }
