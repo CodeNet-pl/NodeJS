@@ -1,3 +1,18 @@
+## 1.1.2 (2025-06-14)
+
+### 🚀 Features
+
+- **json-schema-class:** add package ([1c46c93](https://github.com/CodeNet-pl/NodeJS/commit/1c46c93))
+- **json-schema-class-nestjs-validation-pipe:** add package ([635dd23](https://github.com/CodeNet-pl/NodeJS/commit/635dd23))
+
+### 🩹 Fixes
+
+- **json-schema-class:** fix readme ([9246884](https://github.com/CodeNet-pl/NodeJS/commit/9246884))
+
+### ❤️ Thank You
+
+- Bartosz Pasiński
+
 ## 1.1.1 (2025-06-10)
 
 ### 🚀 Features
