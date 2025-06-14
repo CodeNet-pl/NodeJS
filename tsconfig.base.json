@@ -21,6 +21,9 @@
       "@code-net/json-schema-class": [
         "packages/json-schema-class/src/index.ts"
       ],
+      "@code-net/json-schema-class-nestjs-validation-pipe": [
+        "packages/json-schema-class-nestjs-validation-pipe/src/index.ts"
+      ],
       "@code-net/logging": ["packages/logging/src/index.ts"],
       "@code-net/logging-pino": ["packages/logging-pino/src/index.ts"]
     }

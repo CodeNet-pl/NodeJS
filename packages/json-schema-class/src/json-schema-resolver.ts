@@ -27,10 +27,10 @@ export class JsonSchemaResolver {
     if (!schema) {
       throw new Error(`Schema with id '${schemaId}' not found.`);
     }
-    return this.replaceSchemaId(schema);
+    return this.resolveIdentifiers(schema);
   }
 
-  private replaceSchemaId(schema: JSONSchema7): JSONSchema7 {
+  private resolveIdentifiers(schema: JSONSchema7): JSONSchema7 {
     const newSchema: JSONSchema7 = { ...schema };
     if (newSchema.$id) {
       newSchema.$id = this.schemaId(newSchema.$id);
@@ -41,16 +41,17 @@ export class JsonSchemaResolver {
     if (newSchema.items) {
       if (Array.isArray(newSchema.items)) {
         newSchema.items = newSchema.items.map((item) =>
-          typeof item === 'object' ? this.replaceSchemaId(item) : item
+          typeof item === 'object' ? this.resolveIdentifiers(item) : item
         );
       } else if (typeof newSchema.items === 'object') {
-        newSchema.items = this.replaceSchemaId(newSchema.items);
+        newSchema.items = this.resolveIdentifiers(newSchema.items);
       }
     }
     if (newSchema.properties) {
+      newSchema.properties = { ...newSchema.properties };
       for (const key in newSchema.properties) {
         if (typeof newSchema.properties[key] === 'object') {
-          newSchema.properties[key] = this.replaceSchemaId(
+          newSchema.properties[key] = this.resolveIdentifiers(
             newSchema.properties[key]
           );
         }

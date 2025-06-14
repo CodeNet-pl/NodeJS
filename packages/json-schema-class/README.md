@@ -136,3 +136,38 @@ registry.registerSchema({
   // ...  
 });
 ```
+
+### Usage with AJV
+
+You can use the generated JSON Schemas with AJV for validation:
+
+```typescript
+import Ajv from 'ajv';
+import { JsonSchemaResolver } from '@code-net/json-schema-class';
+import { User } from './path/to/user';
+import { UserIdentity } from './path/to/user-identity';
+
+const ajv = new Ajv();
+const resolver = new JsonSchemaResolver((name) => `/definitions/${name}.json#`);
+
+ajv.addSchema(resolver.schema(User));
+ajv.addSchema(resolver.schema(UserIdentity));
+
+const validate = ajv.getSchema(resolver.schemaId(User))!;
+const valid = validate({
+  id: '123',
+  name: 'John Doe',
+  identities: [
+    { id: '1', provider: 'google' },
+    { id: '2', provider: 'github' },
+  ],
+});
+
+if (valid) {
+  console.log('Valid data!');
+} else {
+  console.error('Validation errors:', validate.errors);
+}
+```
+
+Note: Do not make any async calls between validation and outputting errors.
