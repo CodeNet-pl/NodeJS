@@ -147,11 +147,15 @@ import { JsonSchemaResolver } from '@code-net/json-schema-class';
 import { User } from './path/to/user';
 import { UserIdentity } from './path/to/user-identity';
 
-const ajv = new Ajv();
 const resolver = new JsonSchemaResolver((name) => `/definitions/${name}.json#`);
 
-ajv.addSchema(resolver.schema(User));
-ajv.addSchema(resolver.schema(UserIdentity));
+const ajv = new Ajv({
+  schemas: resolver.all(),
+});
+
+// or
+// ajv.addSchema(resolver.schema(User));
+// ajv.addSchema(resolver.schema(UserIdentity));
 
 const validate = ajv.getSchema(resolver.schemaId(User))!;
 const valid = validate({

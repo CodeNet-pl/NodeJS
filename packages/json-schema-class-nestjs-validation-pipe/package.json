@@ -1,0 +1,22 @@
+{
+  "name": "@code-net/json-schema-class-nestjs-validation-pipe",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": ">=9.0.0",
+    "@nestjs/testing": ">=9.0.0",
+    "@nestjs/platform-express": ">=9.0.0",
+    "ajv": ">=6.12.6",
+    "supertest": "^7.1.1",
+    "@types/supertest": "^6.0.3"
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">=9.0.0",
+    "ajv": ">=6.12.6"
+  }
+}

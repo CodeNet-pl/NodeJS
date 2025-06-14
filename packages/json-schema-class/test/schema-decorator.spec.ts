@@ -77,9 +77,7 @@ test('should be able to use AJV for validation', async () => {
     (schema) => '/definitions/' + schema + '.json#'
   );
 
-  const ajv = new Ajv({ allErrors: true });
-  ajv.addSchema(resolver.schema(SchemaTestDto));
-  ajv.addSchema(resolver.schema(SchemaTestItemDto));
+  const ajv = new Ajv({ allErrors: true, schemas: resolver.all() });
 
   const validate = ajv.getSchema(resolver.schemaId(SchemaTestDto))!;
   expect(validate).toBeDefined();
