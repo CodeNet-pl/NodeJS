@@ -4,13 +4,18 @@
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "author": {
+    "email": "bartosz.pasinski@gmail.com",
+    "name": "Bartosz Pasinski",
+    "url": "https://dev.pasi.pl"
+  },
   "repository": {
     "url": "https://github.com/CodeNet-pl/NodeJS"
   },
   "dependencies": {
     "tslib": "^2.3.0",
     "uuid": "8.3.2",
-    "@code-net/errors": "1.0.0"
+    "@code-net/errors": "1.1.1"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.0"
