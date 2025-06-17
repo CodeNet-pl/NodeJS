@@ -29,8 +29,8 @@ export class JsonSchemaValidationPipe implements PipeTransform {
       });
     this.createError =
       options?.createError ??
-      ((ajv: ValidateFunction) =>
-        new BadRequestException(this.ajv.errorsText(ajv.errors)));
+      ((validate: ValidateFunction) =>
+        new BadRequestException(this.ajv.errorsText(validate.errors)));
   }
 
   async transform(value: unknown, metadata: ArgumentMetadata) {
