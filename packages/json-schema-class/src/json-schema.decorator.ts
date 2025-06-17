@@ -5,10 +5,10 @@ export function JsonSchema(options?: {
   id?: string;
   title?: string;
   description?: string;
+  additionalProperties?: boolean;
 }): ClassDecorator {
   return (target: any) => {
     const dtoName = target.name;
-
     JsonSchemaRegistry.getInstance().registerClass(target, options);
 
     return OriginalJsonSchema({

@@ -4,7 +4,7 @@
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
-  "description": "Library for registering classes and resolving JSON schemas form class.",
+  "description": "Class decorators for JSON Schema rendering and validation.",
   "author": {
     "email": "bartosz.pasinski@gmail.com",
     "name": "Bartosz Pasinski",
@@ -16,7 +16,8 @@
   "dependencies": {
     "tslib": "^2.3.0",
     "ts-decorator-json-schema-generator": "^1.4.1",
-    "json-schema": "^0.4.0"
+    "json-schema": "^0.4.0",
+    "ajv": "8.17.1"
   },
   "devDependencies": {
     "ajv": "8.17.1",

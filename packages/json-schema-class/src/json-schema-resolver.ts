@@ -4,12 +4,13 @@ import { JsonSchemaRegistry } from './json-schema-registry';
 
 export class JsonSchemaResolver {
   constructor(
-    private urlGenerator: (name: string) => string,
+    private schemaIdResolver: (name: string) => string = (name) =>
+      `/definitions/${name}.json#`,
     private registry: JsonSchemaRegistry = JsonSchemaRegistry.getInstance()
   ) {}
 
   schemaId(nameOrClass: string | ClassType): string {
-    return this.urlGenerator(
+    return this.schemaIdResolver(
       typeof nameOrClass === 'function' ? nameOrClass.name : nameOrClass
     );
   }

@@ -12,33 +12,44 @@ import {
   Format,
   Items,
   Max,
+  MaxItems,
   MaxLength,
   Min,
+  MinItems,
   MinLength,
   Not,
   OneOf,
   Optional,
   Pattern,
+  ReadOnly,
   Required,
   Title,
   Type,
 } from 'ts-decorator-json-schema-generator';
+
 const Enum =
-  (values: string[] | Record<string, string>) =>
-  (target: any, propertyKey: string) => {
+  (values: string[] | Record<string, string>): PropertyDecorator =>
+  (target, propertyKey) => {
     if (Array.isArray(values)) {
-      CustomSchema('enum', values)(target, propertyKey);
+      CustomSchema('enum', values)(target, String(propertyKey));
     } else {
       OneOf(
         Object.keys(values).map((key) => ({ const: key, title: values[key] }))
-      )(target, propertyKey);
-      Type('string')(target, propertyKey);
+      )(target, String(propertyKey));
+      Type('string')(target, String(propertyKey));
     }
   };
+
+function Const(value: string | number | boolean): PropertyDecorator {
+  return (target, propertyKey) => {
+    CustomSchema('const', value)(target, String(propertyKey));
+  };
+}
 
 export {
   AllOf,
   AnyOf,
+  Const,
   ContentMediaType,
   CustomSchema,
   Default,
@@ -48,13 +59,16 @@ export {
   Format,
   Items,
   Max,
+  MaxItems,
   MaxLength,
   Min,
+  MinItems,
   MinLength,
   Not,
   OneOf,
   Optional,
   Pattern,
+  ReadOnly,
   Required,
   Title,
   Type,

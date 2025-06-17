@@ -133,7 +133,8 @@ Note that classes registered with `@JsonSchema()` decorator will not be availabl
 ```typescript
 registry.registerClass(SomeClass);
 registry.registerSchema({
-  // ...  
+  type: 'object',
+  // ...
 });
 ```
 

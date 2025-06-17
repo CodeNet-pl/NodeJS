@@ -30,6 +30,7 @@ export class JsonSchemaRegistry {
     options?: {
       title?: string;
       description?: string;
+      additionalProperties?: boolean;
     }
   ) {
     const schemaName = schemaClass.name;
@@ -46,6 +47,9 @@ export class JsonSchemaRegistry {
     }
     if (options?.description) {
       schema.description = options.description;
+    }
+    if (options?.additionalProperties !== undefined) {
+      schema.additionalProperties = options.additionalProperties;
     }
     this.registerSchema(schema);
   }
