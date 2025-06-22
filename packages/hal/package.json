@@ -1,10 +1,25 @@
 {
   "name": "@code-net/hal",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "exports": {
+    ".": "./src/index.js",
+    "./json-schema": "./src/json-schema.js"
+  },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@code-net/json-schema-class": "^1.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@code-net/json-schema-class": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@code-net/json-schema-class": "workspace:*"
   }
 }
