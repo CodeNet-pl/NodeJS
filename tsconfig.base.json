@@ -17,6 +17,13 @@
     "paths": {
       "@code-net/database-context": ["packages/database-context/src/index.ts"],
       "@code-net/errors": ["packages/errors/src/index.ts"],
+      "@code-net/hal": ["packages/hal/src/index.ts"],
+      "@code-net/hal-api": ["packages/hal-api/src/index.ts"],
+      "@code-net/hal-json-schema": ["packages/hal-json-schema/src/index.ts"],
+      "@code-net/hal-json-schema-nestjs": [
+        "packages/hal-json-schema-nestjs/src/index.ts"
+      ],
+      "@code-net/hal-nestjs": ["packages/hal-nestjs/src/index.ts"],
       "@code-net/identity": ["packages/identity/src/index.ts"],
       "@code-net/json-schema-class": [
         "packages/json-schema-class/src/index.ts"
