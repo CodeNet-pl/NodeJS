@@ -1,11 +1,12 @@
 {
   "name": "@code-net/hal-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "commonjs",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js",
-    "./express": "./src/express.js"
+    "./express": "./src/express.js",
+    "./nestjs": "./src/nestjs/index.js"
   },
   "types": "./src/index.d.ts",
   "dependencies": {
