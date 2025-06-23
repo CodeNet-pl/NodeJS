@@ -26,7 +26,7 @@ export interface DatabaseContext<TContext = unknown> {
    * Specify `isolationLevel` to set the isolation level for the transaction.
    */
   transaction<TReturn>(
-    cb: (context: TContext) => Promise<TReturn>,
+    cb: (context?: TContext) => Promise<TReturn>,
     options?: TransactionOptions
   ): Promise<TReturn>;
 
@@ -36,5 +36,5 @@ export interface DatabaseContext<TContext = unknown> {
    * - read-only operations like getting data from read replicas
    * - multi-tenancy where you want to read from a specific tenant's database
    */
-  read<TReturn>(cb: (context: TContext) => Promise<TReturn>): Promise<TReturn>;
+  read<TReturn>(cb: (context?: TContext) => Promise<TReturn>): Promise<TReturn>;
 }
