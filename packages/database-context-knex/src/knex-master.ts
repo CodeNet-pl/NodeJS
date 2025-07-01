@@ -1,12 +1,13 @@
 import type { TransactionOptions } from '@code-net/database-context';
-import { ConcurrencyError } from '@code-net/errors';
+import { ConcurrencyError, PersistenceError } from '@code-net/errors';
 import { Logger, MockLogger } from '@code-net/logging';
 import { AsyncLocalStorage } from 'async_hooks';
 import { Knex } from 'knex';
 import { setTimeout } from 'timers/promises';
-import { KnexConnection, UniqueConstraintViolation } from './knex-connection';
 import { createKnex } from './knex-factory';
 import { KnexSchema } from './knex-schema';
+
+export class UniqueConstraintViolation extends PersistenceError {}
 
 type TransactionStore = {
   trxPromise?: Promise<Knex.Transaction>;
@@ -19,19 +20,17 @@ const asyncStorage: AsyncLocalStorage<TransactionStore> =
   new AsyncLocalStorage();
 
 /**
- * Knex master connection that can be used cross modules.
- * This should not be used directly, use KnexConnection instead.
+ * Knex master connection that can be used across modules.
  */
 export class KnexMaster {
   private schemas: { [key: string]: KnexSchema } = {};
-  private connections: { [key: string]: KnexConnection } = {};
   private knex: Knex;
 
   constructor(
-    private readonly connectionString: string,
+    private readonly connectionOptions: string | Knex.Config,
     private logger: Logger = new MockLogger()
   ) {
-    this.knex = createKnex(connectionString, logger);
+    this.knex = createKnex(connectionOptions, logger);
   }
 
   getKnexOrTransaction(): Knex.Transaction | Knex {
@@ -122,13 +121,6 @@ export class KnexMaster {
     }
   }
 
-  connection(name: string) {
-    if (!this.connections[name]) {
-      this.connections[name] = new KnexConnection(this, name);
-    }
-    return this.connections[name];
-  }
-
   schema(schema: string) {
     if (!this.schemas[schema]) {
       this.schemas[schema] = new KnexSchema(this, schema);
@@ -143,10 +135,18 @@ export class KnexMaster {
     schemaName: string;
   }) {
     await this.knex.raw(`CREATE SCHEMA IF NOT EXISTS ${options.schemaName}`);
-    const url = new URL(this.connectionString);
-    url.searchParams.set('searchPath', options.schemaName);
-
-    const child = createKnex(url.toString());
+    let schemaOptions: Knex.Config | string = this.connectionOptions;
+    if (typeof this.connectionOptions === 'string') {
+      const url = new URL(this.connectionOptions);
+      url.searchParams.set('searchPath', options.schemaName);
+      schemaOptions = url.toString();
+    } else {
+      schemaOptions = {
+        ...this.connectionOptions,
+        searchPath: options.schemaName,
+      };
+    }
+    const child = createKnex(schemaOptions, this.logger);
     await child.migrate
       .latest({
         migrationSource: options.migrationSource,

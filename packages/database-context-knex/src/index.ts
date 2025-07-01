@@ -1,4 +1,3 @@
-export * from './knex-connection';
 export * from './knex-factory';
 export * from './knex-master';
 export * from './knex-schema';

@@ -21,6 +21,48 @@ const schema = master.schema('myschema');
 
 await schema.transaction(async () => {
   const users = await schema.table('users').select('*');
-  console.log(users);
+  // SELECT * FROM myschema.users;
 })
+```
+
+### NestJS
+
+If you are using NestJS, you can use the `KnexModule` to register the master instance as a provider.
+
+```typescript
+import { KnexModule } from '@code-net/database-context-knex/nestjs';
+import { Module } from '@nestjs/common';
+
+@Module({
+  imports: [
+    KnexModule.forRoot({
+      connection: 'pg://localhost:5432/mydb?pool[min]=4',
+    }),
+  ],
+})
+```
+
+Then in each and every module you can register schema context
+
+```typescript
+import { KnexModule } from '@code-net/database-context-knex/nestjs';
+import { Module, Injectable } from '@nestjs/common';
+
+@Module({
+  imports: [
+    KnexModule.forSchema('myschema'),
+  ],
+  providers: [MyService],
+})
+export class MyModule {}
+
+@Injectable()
+class MyService {
+  constructor(private readonly schema: KnexSchema) {}
+
+  @Transactional()
+  async getUsers() {
+    return this.schema.table('users').select('*'); // SELECT * FROM myschema.users;
+  }
+}
 ```
