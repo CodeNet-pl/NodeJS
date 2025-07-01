@@ -1,0 +1,21 @@
+{
+  "name": "@code-net/database-context-knex",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "@code-net/database-context": "*",
+    "@code-net/errors": "1.1.1",
+    "@code-net/logging": "0.3.0",
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "knex": ">=2.0.0"
+  },
+  "devDependencies": {
+    "@code-net/database-context": "workspace:*",
+    "@code-net/logging": "workspace:*",
+    "@code-net/errors": "workspace:*"
+  }
+}

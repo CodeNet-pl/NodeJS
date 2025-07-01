@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@code-net/database-context": ["packages/database-context/src/index.ts"],
+      "@code-net/database-context-knex": [
+        "packages/database-context-knex/src/index.ts"
+      ],
       "@code-net/errors": ["packages/errors/src/index.ts"],
       "@code-net/hal": ["packages/hal/src/index.ts"],
       "@code-net/hal-api": ["packages/hal-api/src/index.ts"],
