@@ -1,12 +1,27 @@
 {
   "name": "@code-net/database-context-knex",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "nestjs": [
+        "./src/nestjs/index.d.ts"
+      ]
+    }
+  },
   "exports": {
-    ".": "./src/index.js",
-    "./nestjs": "./src/nestjs/index.js"
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js",
+      "types": "./src/index.d.ts"
+    },
+    "./nestjs": {
+      "import": "./src/nestjs/index.js",
+      "require": "./src/nestjs/index.js",
+      "types": "./src/nestjs/index.d.ts"
+    }
   },
   "author": {
     "email": "bartosz.pasinski@gmail.com",

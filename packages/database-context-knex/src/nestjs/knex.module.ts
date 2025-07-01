@@ -4,6 +4,7 @@ import {
   KnexMaster,
   KnexSchema,
   MigrationSource,
+  TsMigrationSource,
   createKnex,
   parseConnection,
 } from '../index';
@@ -95,6 +96,11 @@ export class KnexModule {
         if (options.migrationSource) {
           await this.schema.migrate({
             migrationSource: options.migrationSource,
+            migrationDirectory: options.migrationDirectory,
+          });
+        } else if (options.migrationDirectory) {
+          await this.schema.migrate({
+            migrationSource: new TsMigrationSource(options.migrationDirectory),
             migrationDirectory: options.migrationDirectory,
           });
         }
