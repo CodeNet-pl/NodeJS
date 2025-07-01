@@ -43,6 +43,8 @@ export class KnexSchema implements DatabaseContext {
   }
 
   async migrate(options: {
+    schemaName?: string;
+    tableName?: string;
     migrationSource?: MigrationSource<unknown>;
     migrationDirectory?: string;
   }) {
@@ -52,7 +54,7 @@ export class KnexSchema implements DatabaseContext {
     await this.master.migrate({
       migrationSource: options.migrationSource,
       migrationDirectory: options.migrationDirectory,
-      schemaName: this.schema,
+      schemaName: options.schemaName ?? this.schema,
     });
   }
 }

@@ -84,25 +84,37 @@ export class KnexModule {
   }
 
   public static forSchema(options: {
-    schema: string;
-    migrationSource?: MigrationSource<unknown>;
-    migrationDirectory?: string;
+    schemaName: string;
+    migrations?: {
+      directory: string;
+      source?: MigrationSource<unknown>;
+      tableName?: string;
+      schemaName?: string;
+    };
   }): DynamicModule {
     @Module({})
     class KnexSchemaModule {
       constructor(private schema: KnexSchema) {}
 
       async onModuleInit() {
-        if (options.migrationSource) {
-          await this.schema.migrate({
-            migrationSource: options.migrationSource,
-            migrationDirectory: options.migrationDirectory,
-          });
-        } else if (options.migrationDirectory) {
-          await this.schema.migrate({
-            migrationSource: new TsMigrationSource(options.migrationDirectory),
-            migrationDirectory: options.migrationDirectory,
-          });
+        if (options.migrations) {
+          if (options.migrations.source) {
+            await this.schema.migrate({
+              migrationSource: options.migrations.source,
+              schemaName:
+                options.migrations.schemaName || options.migrations.schemaName,
+              tableName: options.migrations.tableName || 'knex_migrations',
+            });
+          } else if (options.migrations.directory) {
+            await this.schema.migrate({
+              schemaName:
+                options.migrations.schemaName || options.migrations.schemaName,
+              tableName: options.migrations.tableName || 'knex_migrations',
+              migrationSource: new TsMigrationSource(
+                options.migrations.directory
+              ),
+            });
+          }
         }
       }
     }
@@ -112,7 +124,7 @@ export class KnexModule {
       providers: [
         {
           provide: KnexSchema,
-          useFactory: (master: KnexMaster) => master.schema(options.schema),
+          useFactory: (master: KnexMaster) => master.schema(options.schemaName),
           inject: [KnexMaster],
         },
       ],

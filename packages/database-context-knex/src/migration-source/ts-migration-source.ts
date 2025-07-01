@@ -12,7 +12,7 @@ export class TsMigrationSource implements Knex.MigrationSource<unknown> {
   async getMigrations() {
     const files = fs
       .readdirSync(this.migrationsDir)
-      .filter((file) => /\.(ts|js)$/.test(file))
+      .filter((file) => /\.(ts|js)$/.test(file) && !file.endsWith('.d.ts'))
       .map((file) => file.replace(/\.(ts|js)$/, '.ts'));
 
     return files.sort();
