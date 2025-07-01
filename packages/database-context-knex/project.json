@@ -22,7 +22,15 @@
         "assets": ["packages/database-context-knex/*.md"]
       }
     },
+    "prepare-publish": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node -e \"const fs = require('fs'); const path = 'dist/packages/database-context-knex/package.json'; const pkg = JSON.parse(fs.readFileSync(path, 'utf8')); delete pkg.devDependencies; fs.writeFileSync(path, JSON.stringify(pkg, null, 2));\""
+      }
+    },
     "nx-release-publish": {
+      "dependsOn": ["prepare-publish"],
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }

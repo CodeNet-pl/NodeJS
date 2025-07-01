@@ -87,13 +87,13 @@ importers:
   packages/database-context-knex:
     dependencies:
       '@code-net/database-context':
-        specifier: '*'
+        specifier: ^1.2.0
         version: link:../database-context
       '@code-net/errors':
-        specifier: 1.1.1
+        specifier: ^1.1.1
         version: link:../errors
       '@code-net/logging':
-        specifier: 0.3.0
+        specifier: ^0.3.0
         version: link:../logging
       knex:
         specifier: '>=2.0.0'
