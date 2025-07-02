@@ -27,6 +27,9 @@
         "packages/hal-json-schema-nestjs/src/index.ts"
       ],
       "@code-net/hal-nestjs": ["packages/hal-nestjs/src/index.ts"],
+      "@code-net/hal-nestjs-swagger": [
+        "packages/hal-nestjs-swagger/src/index.ts"
+      ],
       "@code-net/identity": ["packages/identity/src/index.ts"],
       "@code-net/json-schema-class": [
         "packages/json-schema-class/src/index.ts"

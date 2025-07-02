@@ -1,6 +1,6 @@
 {
-  "name": "@code-net/hal",
-  "version": "1.0.0",
+  "name": "@code-net/hal-json-schema",
+  "version": "0.0.1",
   "author": {
     "email": "bartosz.pasinski@gmail.com",
     "name": "Bartosz Pasinski",
@@ -13,6 +13,7 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@code-net/hal": "*"
   }
 }

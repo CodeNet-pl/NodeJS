@@ -1,3 +1,10 @@
+import type {
+  DeleteHalLink,
+  GetHalLink,
+  PatchHalLink,
+  PostHalLink,
+  PutHalLink,
+} from '@code-net/hal';
 import {
   Const,
   CustomSchema,
@@ -6,13 +13,6 @@ import {
   Required,
   Type,
 } from '@code-net/json-schema-class';
-import {
-  DeleteHalLink,
-  GetHalLink,
-  PatchHalLink,
-  PostHalLink,
-  PutHalLink,
-} from './hal-link';
 
 @JsonSchema({
   additionalProperties: true,

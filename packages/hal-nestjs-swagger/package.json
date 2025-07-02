@@ -1,6 +1,7 @@
 {
-  "name": "@code-net/hal",
-  "version": "1.0.0",
+  "name": "@code-net/hal-nestjs-swagger",
+  "version": "0.0.1",
+  "type": "commonjs",
   "author": {
     "email": "bartosz.pasinski@gmail.com",
     "name": "Bartosz Pasinski",
@@ -9,10 +10,15 @@
   "repository": {
     "url": "https://github.com/CodeNet-pl/NodeJS"
   },
-  "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@nestjs/swagger": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/swagger": ">=9.0.0"
   }
 }
