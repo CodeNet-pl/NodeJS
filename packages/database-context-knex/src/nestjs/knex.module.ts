@@ -44,7 +44,12 @@ export class KnexModule {
           });
         }
       }
+
+      async onApplicationShutdown() {
+        await this.master.destroy();
+      }
     }
+
     return {
       module: KnexRootModule,
       providers: [

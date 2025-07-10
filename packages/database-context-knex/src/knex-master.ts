@@ -155,6 +155,10 @@ export class KnexMaster {
       })
       .finally(() => child.destroy());
   }
+
+  async destroy() {
+    await this.knex.destroy();
+  }
 }
 
 export interface Migration {
