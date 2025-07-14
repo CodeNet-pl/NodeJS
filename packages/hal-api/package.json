@@ -1,14 +1,28 @@
 {
   "name": "@code-net/hal-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "commonjs",
   "main": "./src/index.js",
-  "exports": {
-    ".": "./src/index.js",
-    "./express": "./src/express.js",
-    "./nestjs": "./src/nestjs/index.js"
-  },
   "types": "./src/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "express": [
+        "./src/express.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js",
+      "types": "./src/index.d.ts"
+    },
+    "./express": {
+      "import": "./src/express.js",
+      "require": "./src/express.js",
+      "types": "./src/express.d.ts"
+    }
+  },
   "dependencies": {
     "tslib": "^2.3.0"
   },
