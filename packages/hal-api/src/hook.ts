@@ -22,5 +22,5 @@ export function resolveHref(url: string): string {
     return url[0] === '/' ? url : `/${url}`;
   }
 
-  return new URL(url, baseUrl).href;
+  return baseUrl + (url[0] === '/' ? url.substring(1) : url);
 }
