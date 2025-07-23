@@ -96,11 +96,29 @@ export function routeLink<TCtrl>(
 
   for (const key of Object.keys(argsMeta).reverse()) {
     const [type, index] = key.split(':');
-    if (type === '4' && argsMeta[key].data) {
-      routeParameters.push({
-        name: argsMeta[key].data,
-        type: paramTypes[index],
-      });
+    if (type === '4') {
+      if (argsMeta[key].data) {
+        routeParameters.push({
+          name: argsMeta[key].data,
+          type: paramTypes[index],
+        });
+      } else if (paramTypes[index]) {
+        // if param type is a class
+        if (paramTypes[index].name) {
+          const instance = new paramTypes[index]();
+          // for each class property
+          Object.keys(instance).forEach((prop) => {
+            routeParameters.push({
+              name: prop,
+              type: Reflect.getMetadata(
+                'design:type',
+                instance.constructor.prototype,
+                prop
+              ),
+            });
+          });
+        }
+      }
     }
     // if (type === '3' && !options?.body) {
     //   if (paramTypes && paramTypes[index]) {
@@ -141,7 +159,7 @@ function buildQueryString(
   const provided = routeParameters.reduce(
     (prev: string[], next: RouteParameter, index) => {
       if (params && params[next.name]) {
-        if (next.type === Array) {
+        if (next.type === Array || Array.isArray(params[next.name])) {
           (params[next.name] as string[]).forEach((val) => {
             prev.push(`${next.name}[]=${encodeURIComponent(val)}`);
           });

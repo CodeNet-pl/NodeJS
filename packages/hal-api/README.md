@@ -17,7 +17,7 @@ npm install @code-net/hal-api
 Usage with express API.
 
 ```typescript
-import { resolveHref } from '@code-net/hal-api';
+import { resolveHref, resolveLink } from '@code-net/hal-api';
 import { halLinks } from '@code-net/hal-api/express';
 
 const app = express();
@@ -28,7 +28,7 @@ app.get('/api/resource', (req, res) => {
     name: 'Example Resource',
     _links: {
       self: { href: resolveHref('/resource'), method: 'GET' },
-      related: { href: resolveHref('/related-resource'), method: 'GET' },
+      related: resolveLink({ href: '/related-resource' }),
     },
   };
   res.json(resource);
@@ -91,6 +91,13 @@ Usage with NestJS API.
 ```typescript
 import { Controller, Get, Post, Query } from '@nestjs/common';
 import { routeLink } from '@code-net/hal-api/nestjs';
+import { halLinks } from '@code-net/hal-api/express';
+import { OtherController } from './other.controller';
+
+// ...
+const app: INestApplication = await NestFactory.create(AppModule);
+app.use(halLinks());
+// ...
 
 @Controller('hals')
 class HalController {
@@ -100,6 +107,7 @@ class HalController {
     return {
       _links: {
         post: routeLink(this, 'post', { params: { id: '123', foo: 'test', bar: ['A', 'B'] } }),
+        other: routeLink(OtherController, 'index'),
       },
     };
   }
@@ -121,6 +129,10 @@ curl http://localhost:3000/hals
     "post": {
       "href": "http://localhost:3000/hals/123/post?foo=test&bar[]=A&bar[]=B",
       "method": "POST"
+    },
+    "other": {
+      "href": "http://localhost:3000/other",
+      "method": "GET"
     }
   }
 }
