@@ -6,7 +6,7 @@ import { resolveHref } from '../src/hook';
 const app = express();
 let server: any;
 beforeAll(async () => {
-  app.get('/href/*path', halLinks, (req: Request, res: Response) => {
+  app.get('/href/*path', halLinks(), (req: Request, res: Response) => {
     res.send(resolveHref(req.params['path']));
   });
   server = app.listen(0);

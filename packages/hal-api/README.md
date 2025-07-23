@@ -83,3 +83,45 @@ Response JSON:
   }
 }
 ```
+
+### NestJS
+
+Usage with NestJS API.
+
+```typescript
+import { Controller, Get, Post, Query } from '@nestjs/common';
+import { routeLink } from '@code-net/hal-api/nestjs';
+
+@Controller('hals')
+class HalController {
+  // The URL can contain slashes
+  @Get()
+  async get() {
+    return {
+      _links: {
+        post: routeLink(this, 'post', { params: { id: '123', foo: 'test', bar: ['A', 'B'] } }),
+      },
+    };
+  }
+
+  @Post(':id/post')
+  async post(@Query('foo') foo: string, @Query('bar') bar: string[]) {
+    // Logic here
+  }
+}
+```
+
+```bash
+curl http://localhost:3000/hals
+```
+
+```json
+{
+  "_links": {
+    "post": {
+      "href": "http://localhost:3000/hals/123/post?foo=test&bar[]=A&bar[]=B",
+      "method": "POST"
+    }
+  }
+}
+```

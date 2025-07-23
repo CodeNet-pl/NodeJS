@@ -1,6 +1,6 @@
 {
   "name": "@code-net/hal-api",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
@@ -8,6 +8,9 @@
     "*": {
       "express": [
         "./src/express.d.ts"
+      ],
+      "nestjs": [
+        "./src/nestjs.d.ts"
       ]
     }
   },
@@ -21,6 +24,11 @@
       "import": "./src/express.js",
       "require": "./src/express.js",
       "types": "./src/express.d.ts"
+    },
+    "./nestjs": {
+      "import": "./src/nestjs.js",
+      "require": "./src/nestjs.js",
+      "types": "./src/nestjs.d.ts"
     }
   },
   "dependencies": {
@@ -35,5 +43,13 @@
     "@nestjs/testing": "9.4.3",
     "supertest": "^7.1.1",
     "@types/supertest": "^6.0.3"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    },
+    "@nestjs/common": {
+      "optional": true
+    }
   }
 }
