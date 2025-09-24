@@ -1,0 +1,39 @@
+{
+  "name": "multi-tenancy",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/multi-tenancy/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/multi-tenancy",
+        "main": "packages/multi-tenancy/src/index.ts",
+        "tsConfig": "packages/multi-tenancy/tsconfig.lib.json",
+        "assets": ["packages/multi-tenancy/*.md"]
+      }
+    },
+    "prepare-publish": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node -e \"const fs = require('fs'); const path = 'dist/packages/multi-tenancy/package.json'; const pkg = JSON.parse(fs.readFileSync(path, 'utf8')); delete pkg.devDependencies; fs.writeFileSync(path, JSON.stringify(pkg, null, 2));\""
+      }
+    },
+    "nx-release-publish": {
+      "dependsOn": ["prepare-publish"],
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    }
+  }
+}

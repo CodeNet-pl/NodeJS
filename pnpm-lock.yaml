@@ -128,9 +128,6 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
-      tst-reflect:
-        specifier: ^0.12.0
-        version: 0.12.0
     devDependencies:
       '@nestjs/testing':
         specifier: 9.4.3
@@ -153,34 +150,6 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
-
-  packages/hal-nestjs:
-    dependencies:
-      '@nestjs/common':
-        specifier: '>=9.0.0'
-        version: 11.1.3(reflect-metadata@0.1.14)(rxjs@7.8.2)
-      tslib:
-        specifier: ^2.3.0
-        version: 2.8.1
-    devDependencies:
-      '@code-net/hal-api':
-        specifier: workspace:*
-        version: link:../hal-api
-      '@nestjs/testing':
-        specifier: '>=9.0.0'
-        version: 9.4.3(@nestjs/common@11.1.3)(@nestjs/core@9.4.3)
-      '@types/express':
-        specifier: ^4.17.21
-        version: 4.17.23
-      '@types/supertest':
-        specifier: ^2.0.11
-        version: 2.0.16
-      express:
-        specifier: '>=4.0.0'
-        version: 5.1.0
-      supertest:
-        specifier: ^7.1.1
-        version: 7.1.1
 
   packages/hal-nestjs-swagger:
     dependencies:
@@ -272,6 +241,15 @@ importers:
       pino:
         specifier: ^9.5.0
         version: 9.6.0
+      tslib:
+        specifier: ^2.3.0
+        version: 2.8.1
+
+  packages/multi-tenancy:
+    dependencies:
+      '@code-net/errors':
+        specifier: ^1.1.1
+        version: link:../errors
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
@@ -2931,15 +2909,6 @@ packages:
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
     dev: true
 
-  /@types/express-serve-static-core@4.19.6:
-    resolution: {integrity: sha512-N4LZ2xG7DatVqhCZzOGb1Yi5lMbXSZcmdLDe9EzSndPV2HpWYWzRbaerl2n27irrm94EPpprqa8KpskPT085+A==}
-    dependencies:
-      '@types/node': 18.16.9
-      '@types/qs': 6.14.0
-      '@types/range-parser': 1.2.7
-      '@types/send': 0.17.5
-    dev: true
-
   /@types/express-serve-static-core@5.0.6:
     resolution: {integrity: sha512-3xhRnjJPkULekpSzgtoNYYcTWgEZkp4myc+Saevii5JPnHNvHMRlBSHDbs7Bh1iPPoVTERHEZXyhyLbMEsExsA==}
     dependencies:
@@ -2947,15 +2916,6 @@ packages:
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.5
-    dev: true
-
-  /@types/express@4.17.23:
-    resolution: {integrity: sha512-Crp6WY9aTYP3qPi2wGDo9iUe/rceX01UMhnF1jmwDcKCFM6cx7YhGP/Mpr3y9AASpfHixIG0E6azCcL5OcDHsQ==}
-    dependencies:
-      '@types/body-parser': 1.19.6
-      '@types/express-serve-static-core': 4.19.6
-      '@types/qs': 6.14.0
-      '@types/serve-static': 1.15.8
     dev: true
 
   /@types/express@5.0.3:
@@ -3053,12 +3013,6 @@ packages:
       '@types/methods': 1.1.4
       '@types/node': 18.16.9
       form-data: 4.0.3
-    dev: true
-
-  /@types/supertest@2.0.16:
-    resolution: {integrity: sha512-6c2ogktZ06tr2ENoZivgm7YnprnhYE4ZoXGMY+oA7IuAf17M8FWvujXZGmxLv8y0PTyts4x5A+erSwVUFA8XSg==}
-    dependencies:
-      '@types/superagent': 8.1.9
     dev: true
 
   /@types/supertest@6.0.3:
@@ -7684,10 +7638,6 @@ packages:
 
   /tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
-
-  /tst-reflect@0.12.0:
-    resolution: {integrity: sha512-wMZTfm800Xc+ZlP+N3kAc0zZlVenUtuV8n7yYZR5MxBq6CFZQaW3UdYJ52nqDVZXrQGUhCrHf6LKiIhETvzlSA==}
-    dev: false
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
