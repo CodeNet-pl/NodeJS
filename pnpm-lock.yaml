@@ -128,6 +128,9 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
+      tst-reflect:
+        specifier: ^0.12.0
+        version: 0.12.0
     devDependencies:
       '@nestjs/testing':
         specifier: 9.4.3
@@ -156,9 +159,6 @@ importers:
       '@nestjs/common':
         specifier: '>=9.0.0'
         version: 11.1.3(reflect-metadata@0.1.14)(rxjs@7.8.2)
-      '@nestjs/core':
-        specifier: '>=9.0.0'
-        version: 11.1.3(@nestjs/common@11.1.3)(@nestjs/platform-express@11.1.3)(reflect-metadata@0.1.14)(rxjs@7.8.2)
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
@@ -168,7 +168,7 @@ importers:
         version: link:../hal-api
       '@nestjs/testing':
         specifier: '>=9.0.0'
-        version: 9.4.3(@nestjs/common@11.1.3)(@nestjs/core@11.1.3)
+        version: 9.4.3(@nestjs/common@11.1.3)(@nestjs/core@9.4.3)
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.23
@@ -2149,24 +2149,6 @@ packages:
       '@nestjs/core': 11.1.3(@nestjs/common@11.1.3)(@nestjs/platform-express@11.1.3)(reflect-metadata@0.1.14)(rxjs@7.8.2)
       '@nestjs/platform-express': 11.1.3(@nestjs/common@11.1.3)(@nestjs/core@11.1.3)
       tslib: 2.8.1
-    dev: true
-
-  /@nestjs/testing@9.4.3(@nestjs/common@11.1.3)(@nestjs/core@11.1.3):
-    resolution: {integrity: sha512-LDT8Ai2eKnTzvnPaJwWOK03qTaFap5uHHsJCv6dL0uKWk6hyF9jms8DjyVaGsaujCaXDG8izl1mDEER0OmxaZA==}
-    peerDependencies:
-      '@nestjs/common': ^9.0.0
-      '@nestjs/core': ^9.0.0
-      '@nestjs/microservices': ^9.0.0
-      '@nestjs/platform-express': ^9.0.0
-    peerDependenciesMeta:
-      '@nestjs/microservices':
-        optional: true
-      '@nestjs/platform-express':
-        optional: true
-    dependencies:
-      '@nestjs/common': 11.1.3(reflect-metadata@0.1.14)(rxjs@7.8.2)
-      '@nestjs/core': 11.1.3(@nestjs/common@11.1.3)(@nestjs/platform-express@11.1.3)(reflect-metadata@0.1.14)(rxjs@7.8.2)
-      tslib: 2.5.3
     dev: true
 
   /@nestjs/testing@9.4.3(@nestjs/common@11.1.3)(@nestjs/core@9.4.3):
@@ -7702,6 +7684,10 @@ packages:
 
   /tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  /tst-reflect@0.12.0:
+    resolution: {integrity: sha512-wMZTfm800Xc+ZlP+N3kAc0zZlVenUtuV8n7yYZR5MxBq6CFZQaW3UdYJ52nqDVZXrQGUhCrHf6LKiIhETvzlSA==}
+    dev: false
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}

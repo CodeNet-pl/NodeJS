@@ -11,20 +11,20 @@ interface BaseLink {
   [key: string]: unknown;
 }
 
-export interface PutHalLink extends BaseLink {
-  method: 'PUT';
-}
-
-export interface PatchHalLink extends BaseLink {
-  method: 'PATCH';
-}
-
 export interface GetHalLink extends BaseLink {
   method: 'GET';
 }
 
 export interface PostHalLink extends BaseLink {
   method: 'POST';
+}
+
+export interface PutHalLink extends BaseLink {
+  method: 'PUT';
+}
+
+export interface PatchHalLink extends BaseLink {
+  method: 'PATCH';
 }
 
 export interface DeleteHalLink extends BaseLink {
@@ -39,69 +39,23 @@ export type HalLink =
   | DeleteHalLink;
 ```
 
-## Usage with @code-net/json-schema-class
+## Usage
 
-Install `@code-net/json-schema-class` to use the JSON Schema annotations.
-
-```bash
-npm install @code-net/hal @code-net/json-schema-class
-```
+You can use the types defined in this package to create HAL links in your application. For example:
 
 ```typescript
-import { GetHalLinkDto } from '@code-net/hal/json-schema';
-import { JsonSchema, Required, JsonSchemaResolver } from '@code-net/json-schema-class';
+import { GetHalLink } from '@code-net/hal';
 
-@JsonSchema()
-class MyLinks {
-  @Required()
-  self: GetHalLinkDto;
-}
-
-const resolver = new JsonSchemaResolver();
-
-console.log(resolver.resolve(MyLinks));
-```
-
-// Output:
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/definitions/MyLinks.json#",
-  "type": "object",
-  "properties": {
-    "self": {
-      "$ref": "/definitions/GetHalLinkDto.json#"
-    }
-  },
-  "required": ["self"],
+class MyHalResourceDto {
+  name: string;
+  _links: {
+    self: GetHalLink;
+  };
 }
 ```
 
-```typescript
+See also the following related packages:
 
-console.log(resolver.resolve(GetHalLinkDto));
-```
-
-// Output:
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "properties": {
-    "href": {
-      "type": "string",
-      "format": "uri"
-    },
-    "method": {
-      "type": "string",
-      "enum": ["GET", "POST", "PUT", "DELETE"]
-    },
-    "title": {
-      "type": "string"
-    }
-  },
-  "required": ["href", "method"]
-}
-```
+- [@code-net/hal-api](https://npmjs.com/package/@code-net/hal-api): Allows you to easily create HAL links in your API responses.
+- [@code-net/hal-json-schema](https://npmjs.com/package/@code-net/hal-json-schema): Provides link classes already decorated with [@code-net/json-schema-class](https://npmjs.com/package/@code-net/json-schema-class) decorators, allowing you to transform HAL links into JSON Schema definitions.
+- [@code-net/hal-nestjs-swagger](https://npmjs.com/package/@code-net/hal-nestjs-swagger): Provides link classes already decorated for usage with NestJS Swagger.

@@ -134,7 +134,14 @@ export class KnexMaster {
     migrationDirectory?: string;
     schemaName: string;
   }) {
-    await this.knex.raw(`CREATE SCHEMA IF NOT EXISTS ${options.schemaName}`);
+    // Don't know why but have to use separate instance or connection will not be closed on destroy
+    const tempKnex = createKnex(this.connectionOptions, this.logger);
+    try {
+      await tempKnex.raw(`CREATE SCHEMA IF NOT EXISTS ${options.schemaName}`);
+    } finally {
+      await tempKnex.destroy();
+    }
+
     let schemaOptions: Knex.Config | string = this.connectionOptions;
     if (typeof this.connectionOptions === 'string') {
       const url = new URL(this.connectionOptions);
