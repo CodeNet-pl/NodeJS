@@ -16,6 +16,119 @@ pnpm install @code-net/multi-tenancy
 - **Lifecycle Event Hooks**: Listen to tenant context creation and destruction events.
 - **Error Handling**: Provides custom errors for missing or mismatched tenant contexts.
 
+## Usage
+
+Before you can resolve tenant ID or name, you need to run your code within a tenant context. You can do this using the `withTenant` function.
+
+If you use `express`, you can create a middleware to set the tenant context for each request.
+
+```typescript
+import { withTenant, getTenantId, getTenantName } from '@code-net/multi-tenancy';
+
+const app = express();
+app.use((req, res, next) => {
+  // Resolve the tenant whatever way you want
+  // Here we assume the tenant ID and name are passed in headers
+  const tenantId = req.headers['x-tenant-id'];
+  const tenantName = req.headers['x-tenant-name'];
+  if (!tenantId || !tenantName) {
+    return res.status(400).send('Missing tenant information');
+  }
+  withTenant({ id: tenantId as string, name: tenantName as string }, next);
+});
+```
+
+After this is done, you can use `getTenant()` or `getTenantId()` / `getTenantName()` anywhere in the request handling code to get the current tenant's ID and name.
+
+## Use cases
+
+### Database per tenant with Knex
+
+```typescript
+import knex, { Knex } from 'knex';
+import { onTenant, getTenantId } from '@code-net/multi-tenancy';
+
+const databases: Record<string, Knex> = {};
+onTenant('created', async (tenant) => {
+  // If you have a tenant catalog, you might want to fetch connection info here
+  databases[tenant.id] = knex('postgres://host/' + tenant.name);
+});
+
+export function getKnex(): Knex {
+  const tenantId = getTenantId();
+  const db = databases[tenantId];
+  if (!db) {
+    throw new Error(`No database connection for tenant ${tenantId}`);
+  }
+  return db;
+}
+// Use getKnex() to get the Knex instance for the current tenant
+```
+
+### Row Level Security with PostgreSQL and Knex
+
+```typescript
+import knex, { Knex } from 'knex';
+import { onTenant, getTenantId } from '@code-net/multi-tenancy';
+
+const db = new knex('postgres://host/dbname');
+
+await db.transaction(async (trx) => {
+  // Whenever you start a transaction, set the tenant_id for the transaction connection
+  // This assumes you have a PostgreSQL RLS policy that uses app.tenant_id
+  await trx.raw(`SET app.tenant_id = ?`, [getTenantId()]);
+  // Now you can use trx for all your queries within this tenant context
+  // trx('table').select('*').where(...);
+  // trx('table').insert({ ...
+});
+```
+
+### Row Level Security with PostgreSQL and Knex with DatabaseContext
+
+```typescript
+import knex, { Knex } from 'knex';
+import { onTenant, getTenantId } from '@code-net/multi-tenancy';
+import knex, { Knex } from '@code-net/database-context-knex';
+
+const db = new KnexMaster('postgres://host/dbname');
+
+await db.on('transaction', async (trx) => {
+  // Whenever you start a transaction, set the tenant_id for the transaction connection
+  // This assumes you have a PostgreSQL RLS policy that uses app.tenant_id
+  await trx.raw(`SET app.tenant_id = ?`, [getTenantId()]);
+});
+
+// Use the db instance as usual, it will automatically handle RLS for the current tenant
+```
+
+### Database per tenant with Sequelize
+
+```typescript
+import { Sequelize } from 'sequelize';
+import { onTenantContext, getTenantId } from '@code-net/multi-tenancy';
+
+const databases: Record<string, Sequelize> = {};
+onTenantContext('created', async (tenant) => {
+  // If you have a tenant catalog, you might want to fetch connection info here
+  databases[tenant.id] = new Sequelize(
+    `postgres://host/${tenant.name}`,
+  );
+  // define your models here or register them with another call to `onTenantContext('created', ...)`
+  // If you care about performance you might want to cache metadata for models
+});
+
+export function getConnection() {
+  const tenantId = getTenantId();
+  const db = databases[tenantId];
+  if (!db) {
+    throw new Error(`No database connection for tenant ${tenantId}`);
+  }
+  return db;
+}
+
+// Use getConnection() to get the Sequelize instance for the current tenant
+```
+
 ## API
 
 ### `withTenant(tenant: TenantContext, callback: (tenant: TenantContext) => Promise<T>): Promise<T>`

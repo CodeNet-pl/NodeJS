@@ -39,6 +39,9 @@
       "inputs": ["default", "^default"]
     }
   },
+  "tui": {
+    "enabled": false
+  },
   "release": {
     "projects": ["packages/*"],
     "projectsRelationship": "independent",

@@ -23,6 +23,10 @@ const asyncStorage: AsyncLocalStorage<TransactionStore> =
  * Knex master connection that can be used across modules.
  */
 export class KnexMaster {
+  private listeners = new Map<
+    string,
+    ((data: any) => Promise<void> | void)[]
+  >();
   private schemas: { [key: string]: KnexSchema } = {};
   private knex: Knex;
 
@@ -45,6 +49,23 @@ export class KnexMaster {
     return store.trx;
   }
 
+  public on(
+    event: 'query' | 'transaction',
+    listener: (knex: Knex) => Promise<void> | void
+  ) {
+    const listeners = this.listeners.get(event) ?? [];
+    listeners.push(listener);
+    this.listeners.set(event, listeners);
+    return this;
+  }
+
+  private async emitEvent(event: string, data: any) {
+    const listeners = this.listeners.get(event) ?? [];
+    for (const listener of listeners) {
+      await listener(data);
+    }
+  }
+
   public async transaction<T>(
     cb: (knex: Knex.Transaction) => Promise<T>,
     options?: TransactionOptions
@@ -56,7 +77,9 @@ export class KnexMaster {
       (store.trxPromise === undefined && store.trx === undefined)
     ) {
       store = {
-        trxPromise: this.knex.transaction(),
+        trxPromise: this.knex
+          .transaction()
+          .then((trx) => this.emitEvent('transaction', trx).then(() => trx)),
         count: 1,
         retries: store?.retries ?? 0,
       };
