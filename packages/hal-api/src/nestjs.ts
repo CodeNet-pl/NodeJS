@@ -11,7 +11,7 @@ import { resolveLink } from './link';
 type Stringifyable = string | number | { toString: () => string };
 
 export type RouteOptions = {
-  params: Record<string, Stringifyable | Stringifyable[]>;
+  params?: Record<string, undefined | null | Stringifyable | Stringifyable[]>;
   queryString?: string;
   title?: string;
 } & Record<string, any>;
@@ -134,7 +134,7 @@ export function routeLink<TCtrl>(
   const href = pathWithQuery.replace(
     /:(\w+)/g,
     (match: string, key: string) => {
-      return params[key]?.toString() ?? `{${key}}`;
+      return (params && params[key]?.toString()) ?? `{${key}}`;
     }
   );
   if (href.includes('{')) {
@@ -151,14 +151,18 @@ export function routeLink<TCtrl>(
 
 function buildQueryString(
   routeParameters: RouteParameter[],
-  params: Record<string, { toString: () => string }>
+  params: RouteOptions['params'] = {}
 ) {
   if (routeParameters.length === 0) {
     return '';
   }
   const provided = routeParameters.reduce(
     (prev: string[], next: RouteParameter, index) => {
-      if (params && params[next.name]) {
+      if (
+        params &&
+        typeof params[next.name] !== 'undefined' &&
+        params[next.name] !== null
+      ) {
         if (next.type === Array || Array.isArray(params[next.name])) {
           (params[next.name] as string[]).forEach((val) => {
             prev.push(`${next.name}[]=${encodeURIComponent(val)}`);
@@ -175,7 +179,9 @@ function buildQueryString(
   );
 
   if (provided.length > 0) {
-    const templatedParams = routeParameters.filter((p) => !params[p.name]);
+    const templatedParams = routeParameters.filter(
+      (p) => !Object.hasOwn(params, p.name)
+    );
     if (templatedParams.length === 0) {
       return `?${provided.join('&')}`;
     }

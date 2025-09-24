@@ -21,7 +21,7 @@ import { resolveHref, resolveLink } from '@code-net/hal-api';
 import { halLinks } from '@code-net/hal-api/express';
 
 const app = express();
-app.use(halLinks);
+app.use(halLinks({}));
 
 app.get('/api/resource', (req, res) => {
   const resource = {
@@ -82,6 +82,18 @@ Response JSON:
     }
   }
 }
+```
+
+### Forcing base URL
+
+If you are not able to setup your reverse proxy to send correct `X-Forwarded-*` headers, you can force the base URL like this:
+
+```typescript
+app.use(halLinks({
+  protocol: 'https',
+  host: 'example.com:3000',
+  prefix: '/api',
+}));
 ```
 
 ### NestJS

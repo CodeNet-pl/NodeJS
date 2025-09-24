@@ -26,7 +26,12 @@ class HalController {
       _links: {
         postTemplated: routeLink(this, 'post'),
         postResolved: routeLink(this, 'post', {
-          params: { id: 123, foo: 'bar', bar: ['baz', 'qux'] },
+          params: {
+            id: 123,
+            foo: 'bar',
+            bar: ['baz', 'qux'],
+            optional: undefined,
+          },
         }),
         postObjTemplated: routeLink(this, 'postObj'),
         postObjResolved: routeLink(this, 'postObj', {
@@ -37,7 +42,11 @@ class HalController {
   }
 
   @Post(':id/post')
-  async post(@Query('foo') foo: string, @Query('bar') bar: string[]) {
+  async post(
+    @Query('foo') foo: string,
+    @Query('bar') bar: string[],
+    @Query('optional') optional?: string
+  ) {
     return undefined;
   }
 
@@ -52,7 +61,7 @@ class HalController {
 })
 class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(halLinks({})).forRoutes('*');
+    consumer.apply(halLinks({ host: 'localhost' })).forRoutes('*');
   }
 }
 
@@ -78,25 +87,21 @@ it('should generate href as is', async () => {
     .expect((res) => {
       expect(res.body._links).toEqual({
         postTemplated: {
-          href: expect.stringContaining('/hal/{id}/post{?foo,bar}'),
+          href: 'http://localhost/hal/{id}/post{?foo,bar,optional}',
           method: 'POST',
           templated: true,
         },
         postResolved: {
-          href: expect.stringContaining(
-            '/hal/123/post?foo=bar&bar[]=baz&bar[]=qux'
-          ),
+          href: 'http://localhost/hal/123/post?foo=bar&bar[]=baz&bar[]=qux',
           method: 'POST',
         },
         postObjTemplated: {
-          href: expect.stringContaining('/hal/{id}/post-object{?foo,bar}'),
+          href: 'http://localhost/hal/{id}/post-object{?foo,bar}',
           method: 'POST',
           templated: true,
         },
         postObjResolved: {
-          href: expect.stringContaining(
-            '/hal/123/post-object?foo=bar&bar[]=baz&bar[]=qux'
-          ),
+          href: 'http://localhost/hal/123/post-object?foo=bar&bar[]=baz&bar[]=qux',
           method: 'POST',
         },
       });

@@ -1,6 +1,6 @@
 {
   "name": "@code-net/hal-api",
-  "version": "1.2.3",
+  "version": "1.2.6",
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
