@@ -25,6 +25,8 @@ const listeners = new Map<
   Array<(tenant: TenantContext) => Promise<void>>
 >();
 
+const creations = new Map<string, Promise<unknown>>();
+
 export function withTenant<T>(
   tenant: TenantContext,
   callback: (tenant: TenantContext) => Promise<T>
@@ -37,21 +39,29 @@ export function withTenant<T>(
   if (existing && existing.id !== tenant.id) {
     throw new TenantContextMismatch();
   }
-
-  return storage.run(tenant, async () => {
-    emitEvent('created', tenant);
+  if (creations.has(tenant.id)) {
+    return creations.get(tenant.id) as Promise<T>;
+  }
+  const promise = storage.run(tenant, async () => {
+    await emitEvent('created', tenant);
     try {
       const result = await callback(tenant);
       return result;
     } finally {
-      emitEvent('destroyed', tenant);
+      try {
+        await emitEvent('destroyed', tenant);
+      } finally {
+        creations.delete(tenant.id);
+      }
     }
   });
+  creations.set(tenant.id, promise);
+  return promise;
 }
 
-function emitEvent(event: TenantContextEvent, tenant: TenantContext) {
+async function emitEvent(event: TenantContextEvent, tenant: TenantContext) {
   for (const listener of listeners.get(event) ?? []) {
-    listener(tenant);
+    await listener(tenant);
   }
 }
 

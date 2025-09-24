@@ -1,3 +1,4 @@
+import { setTimeout } from 'timers/promises';
 import {
   getTenant,
   hasTenant,
@@ -44,6 +45,30 @@ it('run with multiple times for one tenant opens the context only once', async (
       expect(getTenant()).toEqual({ id: '1', name: 'test' });
     });
   });
+  expect(openCount).toBe(1);
+  expect(closeCount).toBe(1);
+});
+
+it('can handle parallel runs with same tenant', async () => {
+  let openCount = 0;
+  let closeCount = 0;
+
+  onTenantContext('created', async (tenant) => {
+    openCount++;
+    expect(tenant).toEqual({ id: '1', name: 'test' });
+    await setTimeout(100);
+  });
+  onTenantContext('destroyed', async (tenant) => {
+    closeCount++;
+    expect(tenant).toEqual({ id: '1', name: 'test' });
+  });
+  await Promise.all(
+    Array.from({ length: 10 }).map(() =>
+      withTenant({ id: '1', name: 'test' }, async () => {
+        expect(getTenant()).toEqual({ id: '1', name: 'test' });
+      })
+    )
+  );
   expect(openCount).toBe(1);
   expect(closeCount).toBe(1);
 });
