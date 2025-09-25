@@ -1,6 +1,6 @@
 {
   "name": "@code-net/multi-tenancy",
-  "version": "0.1.3",
+  "version": "0.1.6",
   "description": "A library for managing tenant context lifecycle in Node.js applications.",
   "type": "commonjs",
   "main": "./src/index.js",

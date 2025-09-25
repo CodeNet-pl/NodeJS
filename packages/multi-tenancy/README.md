@@ -23,7 +23,7 @@ Before you can resolve tenant ID or name, you need to run your code within a ten
 If you use `express`, you can create a middleware to set the tenant context for each request.
 
 ```typescript
-import { withTenant, getTenantId, getTenantName } from '@code-net/multi-tenancy';
+import { withTenant } from '@code-net/multi-tenancy';
 
 const app = express();
 app.use((req, res, next) => {
@@ -46,10 +46,14 @@ After this is done, you can use `getTenant()` or `getTenantId()` / `getTenantNam
 
 ```typescript
 import knex, { Knex } from 'knex';
-import { onTenant, getTenantId } from '@code-net/multi-tenancy';
+import { onTenantContext, getTenantId } from '@code-net/multi-tenancy';
 
 const databases: Record<string, Knex> = {};
-onTenant('created', async (tenant) => {
+onTenantContext('created', async (tenant) => {
+  if (databases[tenant.id]) {
+    // Already created
+    return;
+  }
   // If you have a tenant catalog, you might want to fetch connection info here
   databases[tenant.id] = knex('postgres://host/' + tenant.name);
 });
@@ -68,8 +72,8 @@ export function getKnex(): Knex {
 ### Row Level Security with PostgreSQL and Knex
 
 ```typescript
-import knex, { Knex } from 'knex';
-import { onTenant, getTenantId } from '@code-net/multi-tenancy';
+import knex from 'knex';
+import { getTenantId } from '@code-net/multi-tenancy';
 
 const db = new knex('postgres://host/dbname');
 
@@ -86,19 +90,18 @@ await db.transaction(async (trx) => {
 ### Row Level Security with PostgreSQL and Knex with DatabaseContext
 
 ```typescript
-import knex, { Knex } from 'knex';
-import { onTenant, getTenantId } from '@code-net/multi-tenancy';
-import knex, { Knex } from '@code-net/database-context-knex';
+import { getTenantId } from '@code-net/multi-tenancy';
+import { KnexMaster } from '@code-net/database-context-knex';
 
-const db = new KnexMaster('postgres://host/dbname');
+const master = new KnexMaster('postgres://user:pass@host/dbname');
 
-await db.on('transaction', async (trx) => {
+await master.on('transaction', async (trx) => {
   // Whenever you start a transaction, set the tenant_id for the transaction connection
   // This assumes you have a PostgreSQL RLS policy that uses app.tenant_id
   await trx.raw(`SET app.tenant_id = ?`, [getTenantId()]);
 });
 
-// Use the db instance as usual, it will automatically handle RLS for the current tenant
+// Use the master instance as usual, it will automatically handle RLS for the current tenant
 ```
 
 ### Database per tenant with Sequelize
@@ -109,12 +112,15 @@ import { onTenantContext, getTenantId } from '@code-net/multi-tenancy';
 
 const databases: Record<string, Sequelize> = {};
 onTenantContext('created', async (tenant) => {
+  if (databases[tenant.id]) {
+    // Already created
+    return;
+  }
   // If you have a tenant catalog, you might want to fetch connection info here
   databases[tenant.id] = new Sequelize(
     `postgres://host/${tenant.name}`,
   );
   // define your models here or register them with another call to `onTenantContext('created', ...)`
-  // If you care about performance you might want to cache metadata for models
 });
 
 export function getConnection() {
