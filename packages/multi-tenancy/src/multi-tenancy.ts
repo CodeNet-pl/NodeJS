@@ -18,14 +18,20 @@ export class TenantContextMismatch extends Error {
 export type TenantContext = { id: string; name: string };
 
 const storage = new AsyncLocalStorage<TenantContext>();
-type TenantContextEvent = 'created' | 'entered' | 'exited' | 'destroyed';
+type TenantContextEvent =
+  | 'creating'
+  | 'created'
+  | 'entered'
+  | 'exited'
+  | 'destroying'
+  | 'destroyed';
 
 const listeners = new Map<
   TenantContextEvent,
   Array<(tenant: TenantContext) => Promise<void>>
 >();
 
-const creations = new Map<string, Promise<unknown>>();
+const queues = new Map<string, Promise<unknown>>();
 
 export function withTenant<T>(
   tenant: TenantContext,
@@ -39,24 +45,57 @@ export function withTenant<T>(
   if (existing && existing.id !== tenant.id) {
     throw new TenantContextMismatch();
   }
-  if (creations.has(tenant.id)) {
-    return creations.get(tenant.id) as Promise<T>;
-  }
-  const promise = storage.run(tenant, async () => {
-    await emitEvent('created', tenant);
-    try {
-      const result = await callback(tenant);
-      return result;
-    } finally {
-      try {
-        await emitEvent('destroyed', tenant);
-      } finally {
-        creations.delete(tenant.id);
-      }
-    }
-  });
-  creations.set(tenant.id, promise);
+
+  // Check if we need to start a new context or reuse existing
+  const previousPromise = queues.get(tenant.id) ?? Promise.resolve();
+
+  // Chain the new operation after the previous one completes (or fails)
+  const promise = previousPromise
+    .catch(() => {
+      // Ignore errors from previous operations in the queue
+      // Each operation handles its own errors
+    })
+    .then(() =>
+      storage.run(tenant, async () => {
+        await create(tenant);
+        await emitEvent('entered', tenant);
+
+        try {
+          const result = await callback(tenant);
+          return result;
+        } finally {
+          // Clean up the queue only if this is the last promise
+          if (queues.get(tenant.id) === promise) {
+            queues.delete(tenant.id);
+          }
+          // Fire exited event
+          await emitEvent('exited', tenant);
+        }
+      })
+    );
+
+  queues.set(tenant.id, promise);
   return promise;
+}
+
+const creating = new Map<string, Promise<void>>();
+
+/**
+ * Creates the tenant context if not already being created or was already created.
+ */
+async function create(tenant: TenantContext) {
+  if (creating.has(tenant.id)) {
+    await creating.get(tenant.id);
+    return;
+  }
+  const promise = emitEvent('creating', tenant);
+  creating.set(tenant.id, promise);
+  try {
+    await promise;
+    await emitEvent('created', tenant);
+  } finally {
+    creating.delete(tenant.id);
+  }
 }
 
 async function emitEvent(event: TenantContextEvent, tenant: TenantContext) {

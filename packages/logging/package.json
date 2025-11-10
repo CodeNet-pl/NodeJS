@@ -4,8 +4,9 @@
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "license": "MIT",
   "author": {
-    "email": "bartosz.pasinski@gmail.com",
+    "email": "b.pasinski@codenet.pl",
     "name": "Bartosz Pasinski",
     "url": "https://dev.pasi.pl"
   },

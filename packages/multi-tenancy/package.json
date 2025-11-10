@@ -1,11 +1,19 @@
 {
   "name": "@code-net/multi-tenancy",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "A library for managing tenant context lifecycle in Node.js applications.",
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "license": "MIT",
+  "author": {
+    "email": "b.pasinski@codenet.pl",
+    "name": "Bartosz Pasinski",
+    "url": "https://dev.pasi.pl"
+  },
+  "repository": {
+    "url": "https://github.com/CodeNet-pl/NodeJS"
+  },
   "dependencies": {
     "tslib": "^2.3.0",
     "@code-net/errors": "^1.1.1"
