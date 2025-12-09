@@ -1,0 +1,30 @@
+{
+  "name": "@code-net/pagination",
+  "version": "1.0.1",
+  "author": {
+    "email": "bartosz.pasinski@gmail.com",
+    "name": "Bartosz Pasinski",
+    "url": "https://dev.pasi.pl"
+  },
+  "repository": {
+    "url": "https://github.com/CodeNet-pl/NodeJS"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js",
+      "types": "./src/index.d.ts"
+    },
+    "./json-schema": {
+      "import": "./src/json-schema/index.js",
+      "require": "./src/json-schema/index.js",
+      "types": "./src/json-schema/index.d.ts"
+    }
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
