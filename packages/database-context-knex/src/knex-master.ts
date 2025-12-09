@@ -31,7 +31,7 @@ export class KnexMaster {
   private knex: Knex;
 
   constructor(
-    private readonly connectionOptions: string | Knex.Config,
+    private readonly connectionOptions: string | Knex.Config | Knex,
     private logger: Logger = new MockLogger()
   ) {
     this.knex = createKnex(connectionOptions, logger);
@@ -165,18 +165,9 @@ export class KnexMaster {
       await tempKnex.destroy();
     }
 
-    let schemaOptions: Knex.Config | string = this.connectionOptions;
-    if (typeof this.connectionOptions === 'string') {
-      const url = new URL(this.connectionOptions);
-      url.searchParams.set('searchPath', options.schemaName);
-      schemaOptions = url.toString();
-    } else {
-      schemaOptions = {
-        ...this.connectionOptions,
-        searchPath: options.schemaName,
-      };
-    }
-    const child = createKnex(schemaOptions, this.logger);
+    const child = createKnex(this.connectionOptions, this.logger);
+    child.client.searchPath = options.schemaName;
+
     await child.migrate
       .latest({
         migrationSource: options.migrationSource,

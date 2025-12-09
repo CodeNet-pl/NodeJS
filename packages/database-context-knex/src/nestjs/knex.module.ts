@@ -1,12 +1,12 @@
 import { Logger } from '@code-net/logging';
 import { DynamicModule, Global, Module } from '@nestjs/common';
+import { Knex } from 'knex';
 import {
   KnexMaster,
   KnexSchema,
   MigrationSource,
   TsMigrationSource,
   createKnex,
-  parseConnection,
 } from '../index';
 
 export type KnexModuleOptions = {
@@ -20,7 +20,7 @@ export type KnexModuleOptions = {
    * For encrypted connection add "s" to the protocol, eg:
    *  postgress://username:topsecret@myhost.com:5432/mydatabase
    */
-  connection: string;
+  connection: string | Knex.Config | Knex;
 
   migrationSource?: MigrationSource<unknown>;
   migrationDirectory?: string;
@@ -58,23 +58,19 @@ export class KnexModule {
           inject: [Logger],
           useFactory: async (logger: Logger) => {
             if (options.createDatabase) {
-              const { connection } = parseConnection(options.connection);
-              const conn = createKnex(
-                options.connection.replace(/\/[^/]*$/, '/postgres'),
-                logger
-              );
+              const conn = createKnex(options.connection, logger);
+              const database = conn.client.config.connection.database;
+              conn.client.config.connection.database = 'postgres';
 
               const result = await conn.raw(
-                `SELECT 1 FROM pg_database WHERE datname = '${connection.database}'`
+                `SELECT 1 FROM pg_database WHERE datname = '${database}'`
               );
 
               if (result.rows.length === 0) {
-                await conn
-                  .raw(`CREATE DATABASE ${connection.database}`)
-                  .catch((err) => {
-                    logger.error(err);
-                    return;
-                  });
+                await conn.raw(`CREATE DATABASE ${database}`).catch((err) => {
+                  logger.error(err);
+                  return;
+                });
               }
 
               await conn.destroy();
@@ -106,14 +102,10 @@ export class KnexModule {
           if (options.migrations.source) {
             await this.schema.migrate({
               migrationSource: options.migrations.source,
-              schemaName:
-                options.migrations.schemaName || options.migrations.schemaName,
               tableName: options.migrations.tableName || 'knex_migrations',
             });
           } else if (options.migrations.directory) {
             await this.schema.migrate({
-              schemaName:
-                options.migrations.schemaName || options.migrations.schemaName,
               tableName: options.migrations.tableName || 'knex_migrations',
               migrationSource: new TsMigrationSource(
                 options.migrations.directory

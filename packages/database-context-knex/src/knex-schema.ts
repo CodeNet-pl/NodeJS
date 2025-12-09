@@ -4,9 +4,10 @@ import {
 } from '@code-net/database-context';
 import { Knex } from 'knex';
 import { KnexMaster, MigrationSource } from './knex-master';
+import { TsMigrationSource } from './migration-source';
 
 export class KnexSchema implements DatabaseContext {
-  constructor(private master: KnexMaster, readonly schema: string) {}
+  constructor(protected master: KnexMaster, readonly schema: string) {}
 
   read<TReturn>(cb: (context?: unknown) => Promise<TReturn>): Promise<TReturn> {
     return this.transaction(cb); // TODO: Skip transactions
@@ -43,18 +44,18 @@ export class KnexSchema implements DatabaseContext {
   }
 
   async migrate(options: {
-    schemaName?: string;
     tableName?: string;
     migrationSource?: MigrationSource<unknown>;
     migrationDirectory?: string;
   }) {
-    if (!options.migrationSource) {
-      throw new Error('Migration directory is not defined');
+    if (!options.migrationSource && !options.migrationDirectory) {
+      throw new Error('Migration source or directory must be provided');
     }
     await this.master.migrate({
-      migrationSource: options.migrationSource,
-      migrationDirectory: options.migrationDirectory,
-      schemaName: options.schemaName ?? this.schema,
+      migrationSource: options.migrationDirectory
+        ? new TsMigrationSource(options.migrationDirectory)
+        : options.migrationSource,
+      schemaName: this.schema,
     });
   }
 }

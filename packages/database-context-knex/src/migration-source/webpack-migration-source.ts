@@ -1,14 +1,5 @@
-import { readdirSync } from 'fs';
 import { basename } from 'path';
 import { Migration, MigrationSource } from '../knex-master';
-
-export function context(path: string, deep?: boolean, filter?: RegExp) {
-  // Implement Webpack require.context for Jest
-  const files = readdirSync(path);
-  const module = (key: string) => require(`${path}/${key}`);
-  module.keys = () => files;
-  return module;
-}
 
 export class WebpackMigrationSource implements MigrationSource<unknown> {
   constructor(private migrationContext: any) {}

@@ -22,7 +22,14 @@ export class TsMigrationSource implements Knex.MigrationSource<unknown> {
     return file;
   }
 
-  getMigration(file: string) {
-    return require(path.join(this.migrationsDir, file.replace(/\.ts$/, '')));
+  async getMigration(file: string) {
+    // When bundling with webpack module.require forces webpack to NOT traverse __dirname in this package
+    const { up, down } = module.require(
+      path.join(this.migrationsDir, file.replace(/\.ts$/, ''))
+    );
+    if (!down) {
+      return { up, down: async () => undefined };
+    }
+    return { up, down };
   }
 }
