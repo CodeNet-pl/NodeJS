@@ -1,6 +1,6 @@
 {
   "name": "@code-net/pagination",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "author": {
     "email": "bartosz.pasinski@gmail.com",
     "name": "Bartosz Pasinski",
@@ -12,6 +12,16 @@
   "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "json-schema": [
+        "./src/json-schema/index.d.ts"
+      ],
+      "knex": [
+        "./src/knex/index.d.ts"
+      ]
+    }
+  },
   "exports": {
     ".": {
       "import": "./src/index.js",
@@ -22,9 +32,22 @@
       "import": "./src/json-schema/index.js",
       "require": "./src/json-schema/index.js",
       "types": "./src/json-schema/index.d.ts"
+    },
+    "./knex": {
+      "import": "./src/knex/index.js",
+      "require": "./src/knex/index.js",
+      "types": "./src/knex/index.d.ts"
     }
   },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "knex": "*"
+  },
+  "peerDependenciesMeta": {
+    "knex": {
+      "optional": true
+    }
   }
 }
