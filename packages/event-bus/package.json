@@ -1,6 +1,6 @@
 {
   "name": "@code-net/event-bus",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "author": {
     "email": "bartosz.pasinski@gmail.com",
     "name": "Bartosz Pasinski",
@@ -34,11 +34,21 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
+  "devDependencies": {
+    "@nestjs/core": ">=8.0.0",
+    "@nestjs/common": ">=8.0.0",
+    "reflect-metadata": "^0.2.2"
+  },
   "peerDependencies": {
-    "knex": "*"
+    "reflect-metadata": "*",
+    "@nestjs/core": ">=8.0.0",
+    "@nestjs/common": ">=8.0.0"
   },
   "peerDependenciesMeta": {
-    "knex": {
+    "@nestjs/core": {
+      "optional": true
+    },
+    "@nestjs/common": {
       "optional": true
     }
   }

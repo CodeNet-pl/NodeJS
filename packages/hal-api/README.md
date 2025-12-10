@@ -96,6 +96,23 @@ app.use(halLinks({
 }));
 ```
 
+### Fastify
+
+Usage with Fastify API.
+
+```typescript
+import Fastify from 'fastify';
+import halLinks from '@code-net/hal-api/fastify';
+
+const app = Fastify();
+
+app.register(halLinks, {
+  host: 'example.com', // optional
+  protocol: 'https', // optional
+  prefix: '/api', // optional
+});
+```
+
 ### NestJS
 
 Usage with NestJS API.

@@ -19,7 +19,7 @@
         "outputPath": "dist/packages/event-bus",
         "main": "packages/event-bus/src/index.ts",
         "tsConfig": "packages/event-bus/tsconfig.lib.json",
-        "assets": ["packages/event-bus/*.md"]
+        "assets": ["packages/event-bus/README.md"]
       }
     },
     "nx-release-publish": {

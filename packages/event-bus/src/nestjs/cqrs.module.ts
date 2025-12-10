@@ -1,6 +1,7 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { EventBus } from '../events';
+import { EVENTS_HANDLER_METADATA } from '../constants';
+import { EventBus, EventHandlerObject } from '../events';
 import { ExplorerService } from './explorer.service';
 
 @Module({
@@ -11,7 +12,7 @@ export class EventBusModule implements OnModuleInit {
   constructor(
     private readonly moduleRef: ModuleRef,
     private readonly explorerService: ExplorerService,
-    private readonly eventBus: EventBus,
+    private readonly eventBus: EventBus
   ) {}
 
   onModuleInit() {
@@ -22,7 +23,12 @@ export class EventBusModule implements OnModuleInit {
       if (!instance) {
         return;
       }
-      this.eventBus.register(instance);
+
+      this.eventBus.register(this.reflectEventsNames(instance), instance);
     });
+  }
+
+  private reflectEventsNames(handler: EventHandlerObject<any>): string[] {
+    return Reflect.getMetadata(EVENTS_HANDLER_METADATA, handler).name;
   }
 }
