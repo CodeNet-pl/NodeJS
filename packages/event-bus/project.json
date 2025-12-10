@@ -1,0 +1,32 @@
+{
+  "name": "event-bus",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/event-bus/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/event-bus",
+        "main": "packages/event-bus/src/index.ts",
+        "tsConfig": "packages/event-bus/tsconfig.lib.json",
+        "assets": ["packages/event-bus/*.md"]
+      }
+    },
+    "nx-release-publish": {
+      "dependsOn": [],
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    }
+  }
+}
