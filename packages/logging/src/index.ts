@@ -1,3 +1,4 @@
+export * from './global';
 export * from './log-context';
 export * from './log-level';
 export * from './logger';

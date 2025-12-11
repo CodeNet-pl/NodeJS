@@ -1,5 +1,7 @@
-import { LogContext, Logger, LogLevel } from '@code-net/logging';
 import pino, { Logger as Pino } from 'pino';
+import { LogContext } from './log-context';
+import { LogLevel } from './log-level';
+import { Logger } from './logger';
 
 export const pinoCustomLevels: Record<LogLevel, number> = {
   debug: 10,
@@ -77,7 +79,7 @@ export class PinoLogger implements Logger {
       error = error instanceof Error ? error.message : String(error);
     }
 
-    // @ts-expect-error pino has no type for custom levels
+    // @ts-expect-error - Dynamic log level access
     this.logger[level]({ msg: message, ...context, error });
   }
 

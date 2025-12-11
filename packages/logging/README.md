@@ -71,20 +71,52 @@ export abstract class Logger {
 
 ## Implementations
 
-### Mock Logger
+### Noop Logger
 
 This package contains a mock implementation of the interface, which is useful for testing purposes.
 
 ```ts
-import { MockLogger, Logger } from '@code-net/logging';
+import { NoopLogger, Logger } from '@code-net/logging';
 
-const logger: Logger = new MockLogger();
+const logger: Logger = new NoopLogger();
 logger.emergency('Hello world!') // Does nothing
 ```
 
 ### Pino
 
-If you need pino then it is supported via package [@code-net/logging-pino](https://www.npmjs.com/package/@code-net/logging-pino).
+To use pino with this package wrap it with `PinoLogger`:
+
+```ts
+import pino from 'pino';
+import { PinoLogger, Logger } from '@code-net/logging';
+
+const logger = new PinoLogger(pino());
+
+logger.info('Hello world!', { userId: 123 });
+```
+
+### Global logger
+
+For convenience, a global logger instance is provided that can be set and used throughout the application.
+
+Setup global logger before your application starts:
+
+```ts
+import pino from 'pino';
+import { setGlobalLogger } from '@code-net/logging';
+import { PinoLogger } from '@code-net/logging';
+
+setGlobalLogger(new PinoLogger(pino()));
+```
+
+Usage:
+
+```ts
+import { logger } from '@code-net/logging';
+logger.info('Hello world!', { userId: 123 });
+```
+
+By default, the global logger is a `NoopLogger`.
 
 ## License
 

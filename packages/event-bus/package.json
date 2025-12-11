@@ -1,6 +1,6 @@
 {
   "name": "@code-net/event-bus",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "author": {
     "email": "bartosz.pasinski@gmail.com",
     "name": "Bartosz Pasinski",
@@ -15,7 +15,7 @@
   "typesVersions": {
     "*": {
       "nestjs": [
-        "./src/json-schema/index.d.ts"
+        "./src/nestjs/index.d.ts"
       ]
     }
   },

@@ -5,7 +5,7 @@ import { Logger } from './logger';
 /**
  * A mock logger that can be used in tests in place of a real logger
  */
-export class MockLogger implements Logger {
+export class NoopLogger implements Logger {
   public debug(message: string, context?: LogContext): void {
     this.log('debug', message, context);
   }
@@ -44,3 +44,6 @@ export class MockLogger implements Logger {
     return this;
   }
 }
+
+export const MockLogger = NoopLogger;
+export type MockLogger = NoopLogger;

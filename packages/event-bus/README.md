@@ -38,7 +38,7 @@ const eventBus = new EventBus({
   eventTypePolicy: (evt) => evt.constructor.name,
 });
 eventBus.register([UserCreated], new UserCreatedHandler());
-eventBus.publish(new UserCreated('123'));
+await eventBus.publish(new UserCreated('123'));
 ```
 
 ### POJO example
@@ -64,7 +64,31 @@ const eventBus = new EventBus({
   eventTypePolicy: (evt) => evt.type,
 });
 eventBus.register(['UserCreated'], new UserCreatedHandler());
-eventBus.publish({ type: 'UserCreated', userId: '123' });
+await eventBus.publish({ type: 'UserCreated', userId: '123' });
+```
+
+### POJO with function handler
+
+```ts
+import { EventBus, IEventHandler } from '@codenet/event-bus';
+
+type UserCreated = {
+  readonly type: 'UserCreated';
+  readonly userId: string;
+} | {
+  readonly type: 'UserDeleted';
+  readonly userId: string;
+}
+
+function handleUserCreated(event: UserCreated) {
+  console.log(`User created: ${event.userId}`);
+}
+
+const eventBus = new EventBus({
+  eventTypePolicy: (evt) => evt.type,
+});
+eventBus.register(['UserCreated'], handleUserCreated);
+await eventBus.publish({ type: 'UserCreated', userId: '123' });
 ```
 
 ### NestJS Integration
@@ -83,9 +107,9 @@ export class AppModule {}
 class MyService {
   constructor(private readonly eventBus: EventBus) {}
 
-  createUser(userId: string) {
+  async createUser(userId: string) {
     // ... create user logic
-    this.eventBus.publish(new UserCreated(userId));
+    await this.eventBus.publish(new UserCreated(userId));
   }
 }
 ```
