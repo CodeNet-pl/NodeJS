@@ -1,3 +1,4 @@
+export * from './class-to-json-schema';
 export * from './json-schema-registry';
 export * from './json-schema-resolver';
 export * from './json-schema.decorator';

@@ -19,7 +19,7 @@
         "outputPath": "dist/packages/json-schema-class",
         "main": "packages/json-schema-class/src/index.ts",
         "tsConfig": "packages/json-schema-class/tsconfig.lib.json",
-        "assets": ["packages/json-schema-class/*.md"]
+        "assets": ["packages/json-schema-class/README.md"]
       }
     },
     "nx-release-publish": {
