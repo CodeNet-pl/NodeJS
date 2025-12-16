@@ -6,8 +6,20 @@ import { Knex } from 'knex';
 import { KnexMaster, MigrationSource } from './knex-master';
 import { TsMigrationSource } from './migration-source';
 
+export type KnexDatabaseContextOptions = {
+  migrations?: {
+    directory?: string;
+    source?: MigrationSource<unknown>;
+    tableName?: string;
+  };
+};
+
 export class KnexSchema implements DatabaseContext {
-  constructor(protected master: KnexMaster, readonly schema: string) {}
+  constructor(
+    protected master: KnexMaster,
+    readonly schema: string,
+    protected options: KnexDatabaseContextOptions = {}
+  ) {}
 
   read<TReturn>(cb: (context?: unknown) => Promise<TReturn>): Promise<TReturn> {
     return this.transaction(cb); // TODO: Skip transactions
@@ -43,18 +55,25 @@ export class KnexSchema implements DatabaseContext {
     return this.master.getKnexOrTransaction().ref(ref);
   }
 
-  async migrate(options: {
+  async migrate(options?: {
     tableName?: string;
     migrationSource?: MigrationSource<unknown>;
     migrationDirectory?: string;
   }) {
-    if (!options.migrationSource && !options.migrationDirectory) {
+    const opts = {
+      directory:
+        options?.migrationDirectory ?? this.options?.migrations?.directory,
+      tableName: options?.tableName ?? this.options?.migrations?.tableName,
+      source: options?.migrationSource ?? this.options?.migrations?.source,
+    };
+
+    if (!opts.source && !opts.directory) {
       throw new Error('Migration source or directory must be provided');
     }
     await this.master.migrate({
-      migrationSource: options.migrationDirectory
-        ? new TsMigrationSource(options.migrationDirectory)
-        : options.migrationSource,
+      migrationSource: opts.directory
+        ? new TsMigrationSource(opts.directory)
+        : opts.source,
       schemaName: this.schema,
     });
   }

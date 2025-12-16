@@ -18,6 +18,11 @@ export type TransactionOptions = {
 
 export interface DatabaseContext<TContext = unknown> {
   /**
+   * Migrates the database to the latest version.
+   */
+  migrate(): Promise<void>;
+
+  /**
    * Executes a callback within a transaction.
    * If no transaction is active, it will start a new one.
    * If a transaction is already active, it will use that one.

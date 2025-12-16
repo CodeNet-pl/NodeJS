@@ -4,7 +4,9 @@ import {
 } from '@code-net/database-context';
 import { KnexSchema } from './knex-schema';
 
-export class KnexUnitOfWork<TContext> implements DatabaseContext<TContext> {
+export class KnexUnitOfWork<TContext>
+  implements Omit<DatabaseContext<TContext>, 'migrate'>
+{
   constructor(private schema: KnexSchema, private readonly context: TContext) {}
 
   transaction<TReturn>(
