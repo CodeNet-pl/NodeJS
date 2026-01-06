@@ -1,2 +1,2 @@
-export * from '../events';
+export * from '../index';
 export * from './cqrs.module';

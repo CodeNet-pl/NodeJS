@@ -4,7 +4,7 @@ import { Module } from '@nestjs/core/injector/module';
 import { ModulesContainer } from '@nestjs/core/injector/modules-container';
 import { EVENTS_HANDLER_METADATA } from '../constants';
 import { CqrsOptions } from '../cqrs-options';
-import { IEventHandler } from '../events';
+import { IEventHandler } from '..';
 
 @Injectable()
 export class ExplorerService {

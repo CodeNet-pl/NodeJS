@@ -1,7 +1,7 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { EVENTS_HANDLER_METADATA } from '../constants';
-import { EventBus, EventHandlerObject } from '../events';
+import { EventBus, EventHandlerObject } from '..';
 import { ExplorerService } from './explorer.service';
 
 @Module({

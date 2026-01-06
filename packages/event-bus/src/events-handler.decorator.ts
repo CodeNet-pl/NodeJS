@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
-import { EVENTS_HANDLER_METADATA } from '../constants';
-import { IEvent } from '../index';
+import { EVENTS_HANDLER_METADATA } from './constants';
+import { IEvent } from './event.interface';
 
 /**
  * Decorator that marks a class as event handler. An event handler

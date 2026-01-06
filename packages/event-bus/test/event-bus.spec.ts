@@ -1,26 +1,44 @@
 import { EventBus } from '../src';
 
 it('can publish objects handled by POJO object', async () => {
-  const eventBus = new EventBus({
+  type UserCreated = {
+    type: 'UserCreated';
+    userId: string;
+  };
+  type UserUpdated = {
+    type: 'UserUpdated';
+    userId: string;
+    username: string;
+  };
+  const eventBus = new EventBus<UserCreated | UserUpdated>({
     eventTypePolicy: (evt) => evt.type,
   });
 
-  eventBus.register(['UserCreated'], {
-    handle: async (event: any) => {
+  eventBus.subscribe({
+    UserCreated: async (event) => {
       expect(event).toEqual({ type: 'UserCreated', userId: '123' });
     },
   });
 
   await eventBus.publish({ type: 'UserCreated', userId: '123' });
-  expect.assertions(1);
+  await eventBus.publish({
+    type: 'UserUpdated',
+    userId: '123',
+    username: 'newname',
+  });
+  expect.assertions(1); // updated event is not handled
 });
 
-it('can publich objects handled by function handler', async () => {
-  const eventBus = new EventBus({
+it('can publish objects handled by function handler', async () => {
+  type OrderPlaced = {
+    type: 'OrderPlaced';
+    orderId: string;
+  };
+  const eventBus = new EventBus<OrderPlaced>({
     eventTypePolicy: (evt) => evt.type,
   });
 
-  eventBus.register(['OrderPlaced'], async (event: any) => {
+  eventBus.register('OrderPlaced', async (event) => {
     expect(event).toEqual({ type: 'OrderPlaced', orderId: 'abc' });
   });
 
@@ -40,9 +58,9 @@ it('can publish classes handled by class handler', async () => {
     }
   }
 
-  const eventBus = new EventBus();
+  const eventBus = new EventBus<ProductAdded>();
 
-  eventBus.register([ProductAdded], new ProductAddedHandler());
+  eventBus.register(ProductAdded, new ProductAddedHandler());
 
   await eventBus.publish(new ProductAdded('p1'));
   expect.assertions(2);
