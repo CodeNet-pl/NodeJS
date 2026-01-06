@@ -32,3 +32,5 @@ export type HalLink =
   | PutHalLink
   | PatchHalLink
   | DeleteHalLink;
+
+export type HalMethod = HalLink['method'];

@@ -146,7 +146,7 @@ export class KnexMaster {
 
   schema(schema: string) {
     if (!this.schemas[schema]) {
-      this.schemas[schema] = new KnexSchema(this, schema);
+      this.schemas[schema] = new KnexSchema(this, { schema });
     }
 
     return this.schemas[schema];

@@ -7,6 +7,7 @@ import { KnexMaster, MigrationSource } from './knex-master';
 import { TsMigrationSource } from './migration-source';
 
 export type KnexDatabaseContextOptions = {
+  schema?: string;
   migrations?: {
     directory?: string;
     source?: MigrationSource<unknown>;
@@ -16,10 +17,29 @@ export type KnexDatabaseContextOptions = {
 
 export class KnexSchema implements DatabaseContext {
   constructor(
-    protected master: KnexMaster,
-    readonly schema: string,
+    private readonly _master: KnexMaster,
     protected options: KnexDatabaseContextOptions = {}
   ) {}
+
+  getSchemaName(): string {
+    return this.options.schema || 'public';
+  }
+
+  get name(): string {
+    return this.getSchemaName();
+  }
+
+  get schema() {
+    return this._master.getKnexOrTransaction().schema.withSchema(this.name);
+  }
+
+  getMaster(): KnexMaster {
+    return this._master;
+  }
+
+  get master() {
+    return this.getMaster();
+  }
 
   read<TReturn>(cb: (context?: unknown) => Promise<TReturn>): Promise<TReturn> {
     return this.transaction(cb); // TODO: Skip transactions
@@ -30,7 +50,7 @@ export class KnexSchema implements DatabaseContext {
     options?: TransactionOptions
   ): Promise<T> {
     return this.master.transaction(
-      (trx) => cb(trx.withSchema(this.schema)),
+      (trx) => cb(trx.withSchema(this.name)),
       options
     );
   }
@@ -38,8 +58,18 @@ export class KnexSchema implements DatabaseContext {
   public table<T>(tableName: string) {
     return this.master
       .getKnexOrTransaction()
-      .withSchema(this.schema)
+      .withSchema(this.name)
       .table<any, T>(tableName)
+      .timeout(30000, { cancel: true });
+  }
+
+  public from<T extends object = any>(
+    tableName: Knex.AliasDict | Knex.TableDescriptor
+  ) {
+    return this.master
+      .getKnexOrTransaction()
+      .withSchema(this.name)
+      .from<T>(tableName)
       .timeout(30000, { cancel: true });
   }
 
@@ -74,7 +104,7 @@ export class KnexSchema implements DatabaseContext {
       migrationSource: opts.directory
         ? new TsMigrationSource(opts.directory)
         : opts.source,
-      schemaName: this.schema,
+      schemaName: this.name,
     });
   }
 }
